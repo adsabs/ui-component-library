@@ -86,5 +86,8 @@
     "tsdx": "^0.13.2",
     "underscore": "^1.10.2",
     "yup": "^0.28.3"
-  }
+  },
+  "browserslist": [
+    "cover 99.5% in my stats"
+  ]
 }
