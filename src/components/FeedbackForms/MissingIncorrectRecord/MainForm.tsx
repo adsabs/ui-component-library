@@ -18,26 +18,32 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   return (
     <React.Fragment>
       <FlexView column>
-        <Control
-          type="text"
-          field="firstname"
-          label="First Name"
-          a11yPrefix="feedback"
-          placeholder="John"
-          ref={register}
-          errorMessage={errors.firstname ? errors.firstname.message : undefined}
-          required
-        />
-        <Control
-          type="text"
-          field="lastname"
-          label="Last Name"
-          a11yPrefix="feedback"
-          placeholder="Smith"
-          ref={register}
-          errorMessage={errors.lastname ? errors.lastname.message : undefined}
-          required
-        />
+        <FlexView>
+          <div style={{ marginRight: '1rem', width: '100%' }}>
+            <Control
+              type="text"
+              field="firstname"
+              label="First Name"
+              a11yPrefix="feedback"
+              placeholder="John"
+              ref={register}
+              errorMessage={
+                errors.firstname ? errors.firstname.message : undefined
+              }
+              required
+            />
+          </div>
+          <Control
+            type="text"
+            field="lastname"
+            label="Last Name"
+            a11yPrefix="feedback"
+            placeholder="Smith"
+            ref={register}
+            errorMessage={errors.lastname ? errors.lastname.message : undefined}
+            required
+          />
+        </FlexView>
         <Control
           type="text"
           field="email"
