@@ -1,4 +1,4 @@
-import { ApiTarget, apiFetch } from '../../api';
+import { apiFetch, ApiTarget } from '../../api';
 import { SubmitCorrectAbstractFormValues, Url } from '../../models';
 
 // lodash should be a global on the page
@@ -7,7 +7,8 @@ declare var _: any;
 export type FullRecord = Omit<
   SubmitCorrectAbstractFormValues,
   | 'entryType'
-  | 'name'
+  | 'firstname'
+  | 'lastname'
   | 'email'
   | 'collection'
   | 'objects'

@@ -1,18 +1,17 @@
-import React from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
-import * as Yup from 'yup';
 import moment from 'moment';
-import styled from 'styled-components';
+import React from 'react';
 import FlexView from 'react-flexview';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+import * as Yup from 'yup';
 import { FormErrorBoundary } from '../components';
-
 import {
-  ReduxState,
-  SubmitCorrectAbstractFormValues,
   Collection,
   EntryType,
+  ReduxState,
+  SubmitCorrectAbstractFormValues,
 } from '../models';
 import MainForm from './MainForm';
 
@@ -23,7 +22,8 @@ const Heading = styled.h2`
 const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.object(
   {
     entryType: Yup.mixed(),
-    name: Yup.string().required('Name is required'),
+    firstname: Yup.string().required('First name is required'),
+    lastname: Yup.string().required('Last name is required'),
     email: Yup.string()
       .email()
       .required('Email is required'),
@@ -44,8 +44,12 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
       .test(
         'valid date',
         'Invalid date (should be in YYYY-MM format)',
-        (value) =>
-          moment(value, ['YYYY-MM', 'YYYY-MM-DD', 'YYYY-00', 'YYYY-00-00', 'YYYY-MM-00'], true).isValid()
+        (value: string) =>
+          moment(
+            value,
+            ['YYYY-MM', 'YYYY-MM-DD', 'YYYY-00', 'YYYY-00-00', 'YYYY-MM-00'],
+            true
+          ).isValid()
       )
       .required('Publication date is required'),
     urls: Yup.array(
@@ -64,7 +68,8 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
 
 export const defaultValues: SubmitCorrectAbstractFormValues = {
   entryType: EntryType.Edit,
-  name: '',
+  firstname: '',
+  lastname: '',
   email: '',
   collection: [Collection.Astronomy],
   bibcode: '',

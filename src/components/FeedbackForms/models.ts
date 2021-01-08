@@ -146,7 +146,8 @@ export const entryTypeOptions: { key: EntryType; label: string }[] = [
 
 export type SubmitCorrectAbstractFormValues = {
   entryType: EntryType;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   collection: Collection[];
   bibcode: string;

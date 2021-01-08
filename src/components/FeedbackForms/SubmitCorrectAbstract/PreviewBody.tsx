@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
-import { SubmitCorrectAbstractFormValues, EntryType } from '../models';
-import { OriginCtx } from './SubmitCorrectAbstract';
+import { EntryType, SubmitCorrectAbstractFormValues } from '../models';
 import DiffView, { processTree } from './DiffView';
+import { OriginCtx } from './SubmitCorrectAbstract';
 
 const PreviewBody = React.forwardRef<HTMLDivElement>((_, ref) => {
   const { getValues } = useFormContext<SubmitCorrectAbstractFormValues>();
@@ -14,12 +14,12 @@ const PreviewBody = React.forwardRef<HTMLDivElement>((_, ref) => {
     ...origin,
     ...getValues(),
   };
-  const { name, email, entryType } = currentValues;
+  const { firstname, lastname, email, entryType } = currentValues;
 
   return (
     <div ref={ref}>
       <pre>
-        {`From: ${name}
+        {`From: ${firstname} ${lastname}
 Address: ${email}`}
         {entryType === EntryType.New &&
           `
