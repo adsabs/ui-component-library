@@ -61,7 +61,7 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
   ].join(' ');
 
   return (
-    <div className={formGroupClasses}>
+    <div className={formGroupClasses} style={{ width: '100%' }}>
       <Label htmlFor={inputId} required={!!required}>
         {label}
       </Label>

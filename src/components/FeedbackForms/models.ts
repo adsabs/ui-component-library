@@ -71,7 +71,8 @@ type AssociatedBibcode = {
 };
 
 export type AssociatedArticlesFormValues = {
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   relation: 'none' | 'errata' | 'addenda' | 'series' | 'arxiv' | 'other';
   customRelation: string;

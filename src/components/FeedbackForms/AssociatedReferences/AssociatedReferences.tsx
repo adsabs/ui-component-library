@@ -15,7 +15,8 @@ import MainForm from './MainForm';
 
 const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.object().shape(
   {
-    name: Yup.string().required('Required'),
+    firstname: Yup.string().required('First name is required'),
+    lastname: Yup.string().required('Last name is required'),
     email: Yup.string()
       .email()
       .required('Required'),
@@ -26,7 +27,7 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
     customRelation: Yup.string().test(
       'customRelationRequired',
       'Must set a custom relation',
-      function (value) {
+      function(value) {
         const isOther = this.parent.relation === 'other';
         if (isOther && value === '') {
           return false;
@@ -37,7 +38,9 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
     sourceBibcode: Yup.string()
       .required('Source bibcode is required')
       .length(19, 'Invalid Bibcode')
-      .test('No non-arxiv bibcodes', 'Not an arXiv bibcode', function (value: string) {
+      .test('No non-arxiv bibcodes', 'Not an arXiv bibcode', function(
+        value: string
+      ) {
         if (this.resolve(Yup.ref('relation')) === 'arxiv') {
           return value.indexOf('arXiv') > -1;
         }
@@ -55,7 +58,8 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
 );
 
 export const defaultValues: AssociatedArticlesFormValues = {
-  name: '',
+  firstname: '',
+  lastname: '',
   customRelation: '',
   sourceBibcode: '',
   associated: [{ bibcode: '' }],
