@@ -1,17 +1,17 @@
 import React from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 import FlexView from 'react-flexview';
+import { useFormContext, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
-import RecordForm from './RecordForm';
 import { Control, RadioControl, RecaptchaMessage } from '../components';
-import FormPreview from './FormPreview';
-import BibcodeLoaderBtn from './BibcodeLoaderBtn';
-import FormStatus from './FormStatus';
 import {
-  SubmitCorrectAbstractFormValues,
-  entryTypeOptions,
   EntryType,
+  entryTypeOptions,
+  SubmitCorrectAbstractFormValues,
 } from '../models';
+import BibcodeLoaderBtn from './BibcodeLoaderBtn';
+import FormPreview from './FormPreview';
+import FormStatus from './FormStatus';
+import RecordForm from './RecordForm';
 
 interface IMainFormProps {
   onSubmit?: () => void;
@@ -30,16 +30,32 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   return (
     <React.Fragment>
       <FlexView column>
-        <Control
-          type="text"
-          field="name"
-          label="Name"
-          a11yPrefix="feedback"
-          placeholder="John Q. Smith"
-          ref={register}
-          errorMessage={errors.name ? errors.name.message : undefined}
-          required
-        />
+        <FlexView>
+          <div style={{ marginRight: '1rem', width: '100%' }}>
+            <Control
+              type="text"
+              field="firstname"
+              label="First Name"
+              a11yPrefix="feedback"
+              placeholder="John"
+              ref={register}
+              errorMessage={
+                errors.firstname ? errors.firstname.message : undefined
+              }
+              required
+            />
+          </div>
+          <Control
+            type="text"
+            field="lastname"
+            label="Last Name"
+            a11yPrefix="feedback"
+            placeholder="Smith"
+            ref={register}
+            errorMessage={errors.lastname ? errors.lastname.message : undefined}
+            required
+          />
+        </FlexView>
         <Control
           type="text"
           field="email"

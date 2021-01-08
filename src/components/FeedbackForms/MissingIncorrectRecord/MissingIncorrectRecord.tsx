@@ -10,7 +10,8 @@ import { MissingIncorrectRecordFormValues, ReduxState } from '../models';
 import MainForm from './MainForm';
 
 export const defaultValues: MissingIncorrectRecordFormValues = {
-  name: '',
+  firstname: '',
+  lastname: '',
   email: '',
   bibcodes: [{ cited: '', citing: '' }],
   recaptcha: '',
@@ -18,7 +19,8 @@ export const defaultValues: MissingIncorrectRecordFormValues = {
 
 const validationSchema: Yup.ObjectSchema<MissingIncorrectRecordFormValues> = Yup.object().shape(
   {
-    name: Yup.string().required('Required'),
+    firstname: Yup.string().required('First name is required'),
+    lastname: Yup.string().required('Last name is required'),
     email: Yup.string()
       .email()
       .required('Required'),

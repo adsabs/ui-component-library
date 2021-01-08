@@ -1,11 +1,11 @@
 import React from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 import FlexView from 'react-flexview';
-import { Control, SelectControl, RecaptchaMessage } from '../components';
-import { relationOptions, AssociatedArticlesFormValues } from '../models';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { Control, RecaptchaMessage, SelectControl } from '../components';
+import { AssociatedArticlesFormValues, relationOptions } from '../models';
+import BibcodeList from './BibcodeList';
 import FormPreview from './FormPreview';
 import FormStatus from './FormStatus';
-import BibcodeList from './BibcodeList';
 
 interface IMainFormProps {
   onSubmit?: () => void;
@@ -16,16 +16,32 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   return (
     <React.Fragment>
       <FlexView column>
-        <Control
-          type="text"
-          field="name"
-          label="Name"
-          a11yPrefix="feedback"
-          placeholder="John Q. Smith"
-          ref={register}
-          errorMessage={errors.name ? errors.name.message : undefined}
-          required
-        />
+        <FlexView>
+          <div style={{ marginRight: '1rem', width: '100%' }}>
+            <Control
+              type="text"
+              field="firstname"
+              label="First Name"
+              a11yPrefix="feedback"
+              placeholder="John"
+              ref={register}
+              errorMessage={
+                errors.firstname ? errors.firstname.message : undefined
+              }
+              required
+            />
+          </div>
+          <Control
+            type="text"
+            field="lastname"
+            label="Last Name"
+            a11yPrefix="feedback"
+            placeholder="Smith"
+            ref={register}
+            errorMessage={errors.lastname ? errors.lastname.message : undefined}
+            required
+          />
+        </FlexView>
         <Control
           type="text"
           field="email"

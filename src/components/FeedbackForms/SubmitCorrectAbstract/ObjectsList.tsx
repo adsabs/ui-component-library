@@ -1,9 +1,9 @@
 import React from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
 import FlexView from 'react-flexview';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 import { Control } from '../components';
-import { SubmitCorrectAbstractFormValues, ObjectType } from '../models';
+import { SubmitCorrectAbstractFormValues } from '../models';
 
 interface IControlRow {
   count: number;
@@ -25,7 +25,7 @@ const KeywordsList: React.FC = () => {
   const { control, register, errors } = useFormContext<
     SubmitCorrectAbstractFormValues
   >();
-  const { fields, append, remove } = useFieldArray<ObjectType>({
+  const { fields, append, remove } = useFieldArray<{ value: string }>({
     control,
     name,
   });

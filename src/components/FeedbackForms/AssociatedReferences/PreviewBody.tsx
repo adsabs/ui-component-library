@@ -17,16 +17,19 @@ const getMainRelationString = (
   return '';
 };
 
-const getSecondaryRelationString = (relation: AssociatedArticlesFormValues['relation']) => {
-  const match = relationOptions.find(o => o.key === relation);
+const getSecondaryRelationString = (
+  relation: AssociatedArticlesFormValues['relation']
+) => {
+  const match = relationOptions.find((o) => o.key === relation);
   if (match) {
     return match.secondaryLabel;
   }
   return 'related';
-}
+};
 
 export const generatePreview = ({
-  name,
+  firstname,
+  lastname,
   email,
   sourceBibcode,
   associated,
@@ -37,7 +40,7 @@ export const generatePreview = ({
   const relationString = getMainRelationString(relation, customRelation);
   const associationString = getSecondaryRelationString(relation);
 
-  return `From: ${name}
+  return `From: ${firstname} ${lastname}
   Address: ${email}
 
   Correlated articles:
@@ -46,14 +49,14 @@ export const generatePreview = ({
     Math.abs(23 - relationString.length)
   )}${associationString}
   ${preamble}${associated
-      .map(({ bibcode }, idx) => {
-        if (idx === 0) {
-          return ` -> ${bibcode}`;
-        }
+    .map(({ bibcode }, idx) => {
+      if (idx === 0) {
+        return ` -> ${bibcode}`;
+      }
 
-        return `${' '.repeat(preamble.length)} -> ${bibcode}`;
-      })
-      .join('\n')}
+      return `${' '.repeat(preamble.length)} -> ${bibcode}`;
+    })
+    .join('\n')}
   `;
 };
 

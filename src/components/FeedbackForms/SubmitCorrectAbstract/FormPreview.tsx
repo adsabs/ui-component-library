@@ -7,7 +7,8 @@ import { createDiffString, ProcessedFormValues, processTree } from './DiffView';
 import PreviewBody from './PreviewBody';
 import {
   defaultValues,
-  FormSubmissionCtx, OriginCtx
+  FormSubmissionCtx,
+  OriginCtx,
 } from './SubmitCorrectAbstract';
 
 type FeedbackRequest = {
@@ -129,14 +130,14 @@ const createFeedbackString = (
   current: SubmitCorrectAbstractFormValues,
   previewText: string
 ): FeedbackRequest => {
-  const { name, email, recaptcha, entryType } = current;
+  const { firstname, lastname, email, recaptcha, entryType } = current;
   return {
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,
     _subject: `${entryType === EntryType.Edit ? 'Updated' : 'New'} Record`,
     original: processTree(original),
     new: processTree(current),
-    name,
+    name: `${firstname} ${lastname}`,
     email,
     diff: entryType === EntryType.Edit ? previewText : '',
   };

@@ -47,7 +47,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
   const handleReset = () => {
     reset();
     setValue('relation', 'none');
-  }
+  };
 
   const onPreview = async () => {
     if (await trigger()) {
@@ -111,8 +111,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
           {isPending ? (
             <i className="fa fa-spinner fa-spin" aria-hidden />
           ) : (
-              'Preview'
-            )}
+            'Preview'
+          )}
         </button>
         <button type="button" className="btn btn-default" onClick={handleReset}>
           Reset
@@ -151,7 +151,7 @@ type FeedbackRequest = {
   origin: 'user_submission';
   'g-recaptcha-response': string;
   _subject: 'Associated Articles';
-  name: AssociatedArticlesFormValues['name'];
+  name: string;
   email: AssociatedArticlesFormValues['email'];
   source: AssociatedArticlesFormValues['sourceBibcode'];
   target: string[];
@@ -163,7 +163,8 @@ const createFeedbackString = (
   props: AssociatedArticlesFormValues
 ): FeedbackRequest => {
   const {
-    name,
+    firstname,
+    lastname,
     email,
     recaptcha,
     relation,
@@ -176,7 +177,7 @@ const createFeedbackString = (
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,
     _subject: 'Associated Articles',
-    name,
+    name: `${firstname} ${lastname}`,
     email,
     source: sourceBibcode,
     target: associated.map((a) => a.bibcode),

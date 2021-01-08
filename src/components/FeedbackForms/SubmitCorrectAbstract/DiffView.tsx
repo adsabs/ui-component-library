@@ -1,7 +1,7 @@
+import { ArrayChange, Change, diffArrays, diffWords } from 'diff';
 import React from 'react';
-import { SubmitCorrectAbstractFormValues } from '../models';
-import { diffArrays, diffWords, Change, ArrayChange } from 'diff';
 import styled from 'styled-components';
+import { SubmitCorrectAbstractFormValues } from '../models';
 
 interface IDiffViewProps {
   left: SubmitCorrectAbstractFormValues;
@@ -171,7 +171,8 @@ export const processTree = (
   obj: SubmitCorrectAbstractFormValues
 ): ProcessedFormValues => {
   const {
-    name: _name,
+    firstname,
+    lastname,
     email, // skip
     comments = '',
     entryType,
