@@ -11,17 +11,15 @@ interface IRecaptchaProps {
   onCancel(): void;
 }
 
-type ExecuteRef = () => void;
-
 const Recaptcha: React.FC<IRecaptchaProps> = ({ onSubmit, onCancel }) => {
-  const el = React.useRef<HTMLButtonElement>(null);
-  const execute = React.useRef<ExecuteRef | null>(null);
-  const { setValue, register, unregister } = useFormContext();
-  const handleSubmit = () => {
-    if (typeof execute.current === 'function') {
-      execute.current();
+  const el = React.useRef<HTMLDivElement>(null);
+  const [canSubmit, setCanSubmit] = React.useState<boolean>(false);
+  const { setValue, register } = useFormContext();
+  const handleSubmit = React.useCallback(() => {
+    if (canSubmit) {
+      onSubmit();
     }
-  };
+  }, [canSubmit]);
 
   React.useEffect(() => {
     const render = async () => {
@@ -34,29 +32,27 @@ const Recaptcha: React.FC<IRecaptchaProps> = ({ onSubmit, onCancel }) => {
       if (el.current) {
         grecaptcha.render(el.current, {
           sitekey,
-          size: 'invisible',
-          badge: 'inline',
+          size: 'normal',
           callback: (recaptcha: any) => {
             setValue('recaptcha', recaptcha);
-            onSubmit();
+            setCanSubmit(true);
           },
         });
       }
-
-      execute.current = grecaptcha.execute;
     };
     render();
-    return () => {
-      unregister('recaptcha');
-    };
-  }, [el, execute]);
+  }, [el]);
 
   return (
     <>
+      <div
+        id="recaptcha-container"
+        ref={el}
+        style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}
+      />
       <button
         type="submit"
         className="btn btn-primary g-recaptcha"
-        ref={el}
         onClick={handleSubmit}
       >
         Submit
