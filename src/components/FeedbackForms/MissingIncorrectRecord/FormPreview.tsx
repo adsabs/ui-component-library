@@ -156,8 +156,8 @@ type FeedbackRequest = {
   origin: 'user_submission';
   'g-recaptcha-response': string;
   _subject: 'Missing References';
-  name: MissingIncorrectRecordFormValues['name'];
-  email: MissingIncorrectRecordFormValues['email'];
+  name: string;
+  email: string;
   references: {
     citing: string;
     cited: string;
@@ -169,13 +169,13 @@ const createFeedbackString = (
   props: MissingIncorrectRecordFormValues,
   referenceString: string[]
 ): FeedbackRequest => {
-  const { name, email, bibcodes, recaptcha } = props;
+  const { firstname, lastname, email, bibcodes, recaptcha } = props;
 
   return {
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,
     _subject: 'Missing References',
-    name,
+    name: `${firstname} ${lastname}`,
     email,
     references: bibcodes.map(({ citing, cited }, i) => ({
       citing,

@@ -86,7 +86,8 @@ type BibcodeItem = {
 };
 
 export type MissingIncorrectRecordFormValues = {
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   bibcodes: BibcodeItem[];
   recaptcha: string;

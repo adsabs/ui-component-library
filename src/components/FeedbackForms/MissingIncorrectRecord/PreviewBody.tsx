@@ -1,18 +1,18 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
 import Async from 'react-async';
+import { useFormContext } from 'react-hook-form';
 import { apiFetch, ApiTarget } from '../api';
 import { MissingIncorrectRecordFormValues } from '../models';
 
 export const generatePreview = (
-  { bibcodes, email, name }: MissingIncorrectRecordFormValues,
+  { bibcodes, email, firstname, lastname }: MissingIncorrectRecordFormValues,
   data: { export: string },
   ref: React.Ref<HTMLPreElement>
 ) => {
   if (data && data.export) {
     return (
       <pre ref={ref}>
-        {`From: ${name}
+        {`From: ${firstname} ${lastname}
 Address: ${email}
 
 Missing references:

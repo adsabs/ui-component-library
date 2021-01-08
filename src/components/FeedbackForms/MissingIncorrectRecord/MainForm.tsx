@@ -1,11 +1,11 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
 import FlexView from 'react-flexview';
-import FormPreview from './FormPreview';
+import { useFormContext } from 'react-hook-form';
 import { Control, RecaptchaMessage } from '../components';
-import FormStatus from './FormStatus';
-import BibcodeList from './BibcodeList';
 import { MissingIncorrectRecordFormValues } from '../models';
+import BibcodeList from './BibcodeList';
+import FormPreview from './FormPreview';
+import FormStatus from './FormStatus';
 
 interface IMainFormProps {
   onSubmit?: () => void;
@@ -20,12 +20,22 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
       <FlexView column>
         <Control
           type="text"
-          field="name"
-          label="Name"
+          field="firstname"
+          label="First Name"
           a11yPrefix="feedback"
-          placeholder="John Q. Smith"
+          placeholder="John"
           ref={register}
-          errorMessage={errors.name ? errors.name.message : undefined}
+          errorMessage={errors.firstname ? errors.firstname.message : undefined}
+          required
+        />
+        <Control
+          type="text"
+          field="lastname"
+          label="Last Name"
+          a11yPrefix="feedback"
+          placeholder="Smith"
+          ref={register}
+          errorMessage={errors.lastname ? errors.lastname.message : undefined}
           required
         />
         <Control
