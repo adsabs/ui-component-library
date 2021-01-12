@@ -122,6 +122,10 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
         <div className="alert alert-danger" style={{ marginTop: '1rem' }}>
           {(error as any)?.responseJSON?.error || 'Server Error'}
         </div>
+        <div className="alert alert-info" style={{ marginTop: '1rem' }}>
+          Sorry! we're having issues server-side. Please try again or send us an
+          email at <strong>adshelp(at)cfa.harvard.edu</strong>
+        </div>
       </IfRejected>
 
       <IfFulfilled state={state}>
