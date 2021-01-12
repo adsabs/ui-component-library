@@ -32,7 +32,7 @@ const FormStatus: React.FunctionComponent = () => {
 
   if (doneSubmitting) {
     return (
-      <AlertModal type={AlertType.SUCCESS}>Submitted, Thank You!</AlertModal>
+      <AlertModal type={AlertType.SUCCESS}>Submitted, thank you!</AlertModal>
     );
   }
 

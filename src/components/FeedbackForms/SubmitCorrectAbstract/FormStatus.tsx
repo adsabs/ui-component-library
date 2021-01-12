@@ -1,5 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { AlertModal } from '../components';
+import { AlertType } from '../components/AlertModal';
 import { SubmitCorrectAbstractFormValues } from '../models';
 import { FormSubmissionCtx } from './SubmitCorrectAbstract';
 
@@ -21,24 +23,12 @@ const FormStatus: React.FunctionComponent = () => {
   }
 
   if (submissionState?.status === 'pending') {
-    return (
-      <div
-        className="alert alert-info"
-        style={{ marginTop: '1rem', textAlign: 'center' }}
-      >
-        <i className="fa fa-spinner fa-spin" aria-hidden /> Submitting...
-      </div>
-    );
+    return <AlertModal type={AlertType.LOADING}>Submitting...</AlertModal>;
   }
 
   if (submissionState?.status === 'success') {
     return (
-      <div
-        className="alert alert-success"
-        style={{ marginTop: '1rem', textAlign: 'center' }}
-      >
-        <i className="fa fa-check" aria-hidden /> Submitted, Thank you!
-      </div>
+      <AlertModal type={AlertType.SUCCESS}>Submitted, thank you!</AlertModal>
     );
   }
 
