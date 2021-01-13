@@ -52,13 +52,14 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
 
   // this will update the form and context based on data returned
   React.useEffect(() => {
-    const { firstname, lastname, email } = getValues();
+    const { firstname, lastname, email, entryType } = getValues();
     if (isFulfilled && data) {
       const fullRecord: SubmitCorrectAbstractFormValues = {
         ...defaultValues,
         firstname,
         lastname,
         email,
+        entryType,
         ...data,
       };
 
