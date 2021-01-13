@@ -1,13 +1,13 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useAsync } from 'react-async';
-import { fetchFullRecord, FullRecord } from './api';
-import { SubmitCorrectAbstractFormValues } from '../models';
+import { useFormContext } from 'react-hook-form';
 import { Control } from '../components';
+import { SubmitCorrectAbstractFormValues } from '../models';
+import { fetchFullRecord, FullRecord } from './api';
 import {
-  OriginCtx,
-  IOriginContext,
   defaultValues,
+  IOriginContext,
+  OriginCtx,
 } from './SubmitCorrectAbstract';
 
 interface IBibcodeLoadedBtnProps {
@@ -52,9 +52,13 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
 
   // this will update the form and context based on data returned
   React.useEffect(() => {
+    const { firstname, lastname, email } = getValues();
     if (isFulfilled && data) {
-      const fullRecord = {
+      const fullRecord: SubmitCorrectAbstractFormValues = {
         ...defaultValues,
+        firstname,
+        lastname,
+        email,
         ...data,
       };
 
