@@ -28,8 +28,7 @@ const getSecondaryRelationString = (
 };
 
 export const generatePreview = ({
-  firstname,
-  lastname,
+  name,
   email,
   sourceBibcode,
   associated,
@@ -40,7 +39,7 @@ export const generatePreview = ({
   const relationString = getMainRelationString(relation, customRelation);
   const associationString = getSecondaryRelationString(relation);
 
-  return `From: ${firstname} ${lastname}
+  return `From: ${name}
   Address: ${email}
 
   Correlated articles:

@@ -5,14 +5,14 @@ import { apiFetch, ApiTarget } from '../api';
 import { MissingIncorrectRecordFormValues } from '../models';
 
 export const generatePreview = (
-  { bibcodes, email, firstname, lastname }: MissingIncorrectRecordFormValues,
+  { bibcodes, email, name }: MissingIncorrectRecordFormValues,
   data: { export: string },
   ref: React.Ref<HTMLPreElement>
 ) => {
   if (data && data.export) {
     return (
       <pre ref={ref}>
-        {`From: ${firstname} ${lastname}
+        {`From: ${name}
 Address: ${email}
 
 Missing references:

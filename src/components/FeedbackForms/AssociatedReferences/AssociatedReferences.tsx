@@ -15,8 +15,7 @@ import MainForm from './MainForm';
 
 const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.object().shape(
   {
-    firstname: Yup.string().required('First name is required'),
-    lastname: Yup.string().required('Last name is required'),
+    name: Yup.string().required('Name is required'),
     email: Yup.string()
       .email()
       .required('Required'),
@@ -58,8 +57,7 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
 );
 
 export const defaultValues: AssociatedArticlesFormValues = {
-  firstname: '',
-  lastname: '',
+  name: '',
   customRelation: '',
   sourceBibcode: '',
   associated: [{ bibcode: '' }],

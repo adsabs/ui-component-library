@@ -171,8 +171,7 @@ export const processTree = (
   obj: SubmitCorrectAbstractFormValues
 ): ProcessedFormValues => {
   const {
-    firstname,
-    lastname,
+    name,
     email, // skip
     comments = '',
     entryType,

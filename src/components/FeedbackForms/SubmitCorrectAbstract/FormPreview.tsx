@@ -130,14 +130,14 @@ const createFeedbackString = (
   current: SubmitCorrectAbstractFormValues,
   previewText: string
 ): FeedbackRequest => {
-  const { firstname, lastname, email, recaptcha, entryType } = current;
+  const { name, email, recaptcha, entryType } = current;
   return {
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,
     _subject: `${entryType === EntryType.Edit ? 'Updated' : 'New'} Record`,
     original: processTree(original),
     new: processTree(current),
-    name: `${firstname} ${lastname}`,
+    name,
     email,
     diff: entryType === EntryType.Edit ? previewText : '',
   };
