@@ -14,12 +14,12 @@ const PreviewBody = React.forwardRef<HTMLDivElement>((_, ref) => {
     ...origin,
     ...getValues(),
   };
-  const { firstname, lastname, email, entryType } = currentValues;
+  const { name, email, entryType } = currentValues;
 
   return (
     <div ref={ref}>
       <pre>
-        {`From: ${firstname} ${lastname}
+        {`From: ${name}
 Address: ${email}`}
         {entryType === EntryType.New &&
           `

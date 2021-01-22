@@ -169,13 +169,13 @@ const createFeedbackString = (
   props: MissingIncorrectRecordFormValues,
   referenceString: string[]
 ): FeedbackRequest => {
-  const { firstname, lastname, email, bibcodes, recaptcha } = props;
+  const { name, email, bibcodes, recaptcha } = props;
 
   return {
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,
     _subject: 'Missing References',
-    name: `${firstname} ${lastname}`,
+    name,
     email,
     references: bibcodes.map(({ citing, cited }, i) => ({
       citing,

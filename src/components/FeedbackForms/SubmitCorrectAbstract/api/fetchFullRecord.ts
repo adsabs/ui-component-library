@@ -7,8 +7,7 @@ declare var _: any;
 export type FullRecord = Omit<
   SubmitCorrectAbstractFormValues,
   | 'entryType'
-  | 'firstname'
-  | 'lastname'
+  | 'name'
   | 'email'
   | 'collection'
   | 'objects'

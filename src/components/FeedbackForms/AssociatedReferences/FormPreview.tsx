@@ -167,8 +167,7 @@ const createFeedbackString = (
   props: AssociatedArticlesFormValues
 ): FeedbackRequest => {
   const {
-    firstname,
-    lastname,
+    name,
     email,
     recaptcha,
     relation,
@@ -181,7 +180,7 @@ const createFeedbackString = (
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,
     _subject: 'Associated Articles',
-    name: `${firstname} ${lastname}`,
+    name,
     email,
     source: sourceBibcode,
     target: associated.map((a) => a.bibcode),

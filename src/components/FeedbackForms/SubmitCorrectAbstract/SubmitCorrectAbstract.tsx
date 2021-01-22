@@ -22,14 +22,13 @@ const Heading = styled.h2`
 const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.object(
   {
     entryType: Yup.mixed(),
-    firstname: Yup.string().required('First name is required'),
-    lastname: Yup.string().required('Last name is required'),
+    name: Yup.string().required('Name is required'),
     email: Yup.string()
       .email()
       .required('Email is required'),
     collection: Yup.array().of(Yup.string()),
     bibcode: Yup.string(),
-    title: Yup.string().required('Title is required'),
+    title: Yup.string(),
     authors: Yup.array(
       Yup.object().shape({
         id: Yup.string(),
@@ -68,8 +67,7 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
 
 export const defaultValues: SubmitCorrectAbstractFormValues = {
   entryType: EntryType.Edit,
-  firstname: '',
-  lastname: '',
+  name: '',
   email: '',
   collection: [Collection.Astronomy],
   bibcode: '',

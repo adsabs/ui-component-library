@@ -71,8 +71,7 @@ type AssociatedBibcode = {
 };
 
 export type AssociatedArticlesFormValues = {
-  firstname: string;
-  lastname: string;
+  name: string;
   email: string;
   relation: 'none' | 'errata' | 'addenda' | 'series' | 'arxiv' | 'other';
   customRelation: string;
@@ -87,8 +86,7 @@ type BibcodeItem = {
 };
 
 export type MissingIncorrectRecordFormValues = {
-  firstname: string;
-  lastname: string;
+  name: string;
   email: string;
   bibcodes: BibcodeItem[];
   recaptcha: string;
@@ -148,8 +146,7 @@ export const entryTypeOptions: { key: EntryType; label: string }[] = [
 
 export type SubmitCorrectAbstractFormValues = {
   entryType: EntryType;
-  firstname: string;
-  lastname: string;
+  name: string;
   email: string;
   collection: Collection[];
   bibcode: string;
