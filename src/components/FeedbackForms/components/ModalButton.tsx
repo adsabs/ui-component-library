@@ -1,11 +1,12 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { Modal } from 'react-bootstrap';
 
 interface IModalButtonProps {
   children?: React.ReactNode;
   disabled?: boolean;
   beforeOpen?: () => Promise<boolean>;
+  beforeClose?: () => Promise<boolean>;
   onSubmit?: () => void;
   onCancel?: () => void;
   buttonText?: string | React.ReactNode;
@@ -24,6 +25,7 @@ const ModalButton: React.FunctionComponent<IModalButtonProps> = ({
   children,
   disabled,
   beforeOpen,
+  beforeClose,
   onSubmit,
   onCancel,
   buttonText,
@@ -33,19 +35,31 @@ const ModalButton: React.FunctionComponent<IModalButtonProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (typeof onSubmit === 'function') {
       onSubmit();
     }
-    setOpen(false);
+    await handleClose();
   };
-  const handleCancel = () => {
-    setOpen(false);
+
+  const handleClose = async () => {
+    let allow = true;
+    if (typeof beforeClose === 'function') {
+      allow = await beforeClose();
+    }
+    if (allow) {
+      setOpen(false);
+    }
+  };
+
+  const handleCancel = async () => {
     if (typeof onCancel === 'function') {
       onCancel();
     }
+    await handleClose();
   };
+
   const handleOpen = async () => {
     let allow = true;
     if (typeof beforeOpen === 'function') {
@@ -68,7 +82,7 @@ const ModalButton: React.FunctionComponent<IModalButtonProps> = ({
       >
         {buttonText}
       </button>
-      <Modal show={open} onHide={handleCancel} backdrop="static">
+      <Modal show={open} onHide={handleClose} backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>

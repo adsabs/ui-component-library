@@ -1,6 +1,7 @@
 import React from 'react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { shallowEqual } from '../../../utils';
 import { Control, ModalButton } from '../components';
 import { Author, SubmitCorrectAbstractFormValues } from '../models';
 
@@ -9,110 +10,136 @@ interface IModifyProps {
   author: Author;
   authors: Author[];
 }
-const Modify: React.FC<IModifyProps> = React.memo(
-  ({ author, onSubmit, authors }) => {
-    React.useEffect(() => {
-      setState(author);
-    }, []);
+const Modify: React.FC<IModifyProps> = ({ author, onSubmit, authors }) => {
+  const initialState = {
+    aff: '',
+    id: '',
+    name: '',
+    position: 0,
+    orcid: '',
+  };
+  const [state, setState] = React.useState<Author>(initialState);
+  React.useEffect(() => {
+    setState(author);
+  }, []);
 
-    const handleSubmit = () => {
-      onSubmit(state);
-    };
+  const handleSubmit = () => {
+    onSubmit(state);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, type, value } = event.currentTarget;
+    // reset state
+    setState(initialState);
+  };
 
-      if (type === 'number') {
-        const num = parseInt(value, 10);
-        setState({ ...state, [name]: num - 1 });
-      } else {
-        setState({ ...state, [name]: value });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, type, value } = event.currentTarget;
+
+    if (type === 'number') {
+      const num = parseInt(value, 10);
+      setState({ ...state, [name]: num - 1 });
+    } else {
+      setState({ ...state, [name]: value });
+    }
+  };
+
+  return (
+    <ModalButton
+      buttonText={
+        <>
+          <i className="fa fa-pencil" aria-hidden /> Modify
+        </>
       }
-    };
-
-    const [state, setState] = React.useState<Author>({
-      aff: '',
-      id: '',
-      name: '',
-      position: 0,
-      orcid: '',
-    });
-
-    return (
-      <ModalButton
-        buttonText={
-          <>
-            <i className="fa fa-pencil" aria-hidden /> Modify
-          </>
-        }
-        buttonStyle="default"
-        buttonSize="xs"
-        modalTitle="Editing author"
-        onSubmit={handleSubmit}
-      >
-        <Control
-          type="text"
-          field="name"
-          label="Name"
-          a11yPrefix="feedback"
+      buttonStyle="default"
+      buttonSize="xs"
+      modalTitle="Editing author"
+      onSubmit={handleSubmit}
+    >
+      <Control
+        type="text"
+        field="name"
+        label="Name"
+        a11yPrefix="feedback"
+        onChange={handleChange}
+        defaultValue={author.name}
+      />
+      <Control
+        type="text"
+        field="aff"
+        label="Affiliation"
+        a11yPrefix="feedback"
+        onChange={handleChange}
+        defaultValue={author.aff}
+      />
+      <Control
+        type="text"
+        field="orcid"
+        label="ORCiD"
+        a11yPrefix="feedback"
+        onChange={handleChange}
+        defaultValue={author.orcid}
+      />
+      <div className="form-group">
+        <label htmlFor="feedback_author_position_spinner">Position</label>
+        <input
+          className="form-control"
+          id="feedback_author_position_spinner"
+          type="number"
+          name="position"
           onChange={handleChange}
-          defaultValue={author.name}
+          defaultValue={author.position + 1}
+          max={authors.length}
+          min={1}
+          step={1}
         />
-        <Control
-          type="text"
-          field="aff"
-          label="Affiliation"
-          a11yPrefix="feedback"
-          onChange={handleChange}
-          defaultValue={author.aff}
-        />
-        <Control
-          type="text"
-          field="orcid"
-          label="ORCiD"
-          a11yPrefix="feedback"
-          onChange={handleChange}
-          defaultValue={author.orcid}
-        />
-        <div className="form-group">
-          <label htmlFor="feedback_author_position_spinner">Position</label>
-          <input
-            className="form-control"
-            id="feedback_author_position_spinner"
-            type="number"
-            name="position"
-            onChange={handleChange}
-            defaultValue={author.position + 1}
-            max={authors.length}
-            min={1}
-            step={1}
-          />
-        </div>
-      </ModalButton>
-    );
-  }
-);
+      </div>
+    </ModalButton>
+  );
+};
 
 interface IAddProps {
   onSubmit: (author: Author) => void;
 }
-const Add: React.FC<IAddProps> = React.memo(({ onSubmit }) => {
+const Add: React.FC<IAddProps> = ({ onSubmit }) => {
+  interface AddAuthorType extends Omit<Author, 'name'> {
+    firstname: string;
+    lastname: string;
+  }
+  const initialState: AddAuthorType = {
+    aff: '',
+    id: '',
+    firstname: '',
+    lastname: '',
+    position: -1,
+    orcid: '',
+  };
+  const [state, setState] = React.useState<AddAuthorType>(initialState);
+
+  const handleBeforeClose = async () => {
+    // Do not allow submission if nothing was entered
+    return !shallowEqual(state, initialState);
+  };
+
   const handleSubmit = () => {
-    onSubmit(state);
+    // Do not allow submission if nothing was entered
+    if (shallowEqual(state, initialState)) {
+      return;
+    }
+
+    const hasNames = state.lastname.length > 0 && state.firstname.length > 0;
+    onSubmit({
+      ...state,
+
+      // add comma if both names have been entered
+      name: `${state.lastname}${hasNames ? ', ' : ''}${state.firstname}`,
+    });
+
+    // reset state
+    setState(initialState);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
     setState({ ...state, [name]: value });
   };
-
-  const [state, setState] = React.useState<Author>({
-    aff: '',
-    id: '',
-    name: '',
-    position: -1,
-    orcid: '',
-  });
 
   return (
     <ModalButton
@@ -125,11 +152,19 @@ const Add: React.FC<IAddProps> = React.memo(({ onSubmit }) => {
       buttonSize="xs"
       modalTitle="Adding new author"
       onSubmit={handleSubmit}
+      beforeClose={handleBeforeClose}
     >
       <Control
         type="text"
-        field="name"
-        label="Name"
+        field="firstname"
+        label="First Name"
+        a11yPrefix="feedback"
+        onChange={handleChange}
+      />
+      <Control
+        type="text"
+        field="lastname"
+        label="Last Name"
         a11yPrefix="feedback"
         onChange={handleChange}
       />
@@ -149,7 +184,7 @@ const Add: React.FC<IAddProps> = React.memo(({ onSubmit }) => {
       />
     </ModalButton>
   );
-});
+};
 
 const getNewAuthorList = (list: Author[], modifiedAuthor: Author): Author[] => {
   // if position changed, remove the old item
@@ -245,6 +280,7 @@ const AuthorTable: React.FC<IAuthorTableProps> = ({ onChange, authors }) => {
           author={author}
           onSubmit={handleModifySubmit}
           authors={authors}
+          key={author.id}
         />
       ),
       button: true,
