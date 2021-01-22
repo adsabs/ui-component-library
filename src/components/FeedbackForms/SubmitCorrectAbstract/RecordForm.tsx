@@ -1,12 +1,12 @@
 import React from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
+import styled from 'styled-components';
 import { CheckboxControl, Control } from '../components';
-import UrlsList from './UrlsList';
+import { collectionOptions, SubmitCorrectAbstractFormValues } from '../models';
+import AuthorTable from './AuthorTable';
 import KeywordsList from './KeywordsList';
 import ReferencesList from './ReferencesList';
-import AuthorTable from './AuthorTable';
-import { SubmitCorrectAbstractFormValues, collectionOptions } from '../models';
-import styled from 'styled-components';
+import UrlsList from './UrlsList';
 
 export interface IRecordFormProps {
   edit?: boolean;
@@ -33,7 +33,6 @@ const RecordForm: React.FC<IRecordFormProps> = () => {
         placeholder=""
         ref={register}
         errorMessage={errors.title ? errors.title.message : undefined}
-        required
       />
       <Label>Authors</Label>
       <AuthorTable />

@@ -28,7 +28,7 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
       .required('Email is required'),
     collection: Yup.array().of(Yup.string()),
     bibcode: Yup.string(),
-    title: Yup.string().required('Title is required'),
+    title: Yup.string(),
     authors: Yup.array(
       Yup.object().shape({
         id: Yup.string(),
