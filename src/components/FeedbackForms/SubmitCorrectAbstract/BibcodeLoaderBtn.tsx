@@ -39,7 +39,7 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
         return;
       }
 
-      if (bibcode.length === 19) {
+      if (bibcode.length === 19 && !isLoading) {
         run(bibcode);
       } else {
         setError({ name: 'bibcode', message: 'Invalid Bibcode' });
