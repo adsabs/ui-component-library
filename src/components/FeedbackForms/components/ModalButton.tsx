@@ -57,7 +57,7 @@ const ModalButton: React.FunctionComponent<IModalButtonProps> = ({
     if (typeof onCancel === 'function') {
       onCancel();
     }
-    await handleClose();
+    setOpen(false);
   };
 
   const handleOpen = async () => {
