@@ -298,6 +298,17 @@ const AuthorTable: React.FC<IAuthorTableProps> = ({ onChange, authors }) => {
           columns={columns}
           data={authors}
           actions={<Add onSubmit={handleAddSubmit} />}
+          customStyles={{
+            header: {
+              style: {
+                flexDirection: 'row-reverse',
+                // @ts-ignore
+                '&>*': {
+                  justifyContent: 'flex-start !important',
+                },
+              },
+            },
+          }}
           pagination
           highlightOnHover
           selectableRows
