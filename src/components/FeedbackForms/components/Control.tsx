@@ -36,6 +36,7 @@ export interface IControlProps {
   required?: boolean;
   onChange?: React.FormEventHandler<HTMLInputElement>;
   actionButton?: React.ReactNode;
+  actionButtonPos?: 'start' | 'end';
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
 const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
@@ -49,6 +50,7 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
     helpMessage,
     defaultValue,
     actionButton,
+    actionButtonPos = 'end',
     onChange,
     required,
     inputProps,
@@ -67,6 +69,9 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
       </Label>
       {actionButton ? (
         <div className="input-group">
+          {actionButtonPos === 'start' && (
+            <span className="input-group-btn">{actionButton}</span>
+          )}
           <input
             type={type}
             name={field}
@@ -79,7 +84,9 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
             onChange={onChange}
             {...inputProps}
           />
-          <span className="input-group-btn">{actionButton}</span>
+          {actionButtonPos === 'end' && (
+            <span className="input-group-btn">{actionButton}</span>
+          )}
         </div>
       ) : (
         <input

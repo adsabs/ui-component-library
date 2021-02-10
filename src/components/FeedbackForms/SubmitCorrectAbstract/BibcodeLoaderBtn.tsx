@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAsync } from 'react-async';
+import FlexView from 'react-flexview';
 import { useFormContext } from 'react-hook-form';
 import { Control } from '../components';
 import { SubmitCorrectAbstractFormValues } from '../models';
@@ -71,22 +72,26 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
   }, [isFulfilled, isLoading]);
 
   return (
-    <Control
-      type="text"
-      field="bibcode"
-      label="Bibliographic Code"
-      a11yPrefix="feedback"
-      placeholder="1999ApJ...511L..65Y"
-      ref={register}
-      errorMessage={
-        errors.bibcode
-          ? errors.bibcode.message
-          : error
-          ? error.message
-          : undefined
-      }
-      inputProps={{ onKeyUp: (e) => e.which === 13 && loadRecord() }}
-      actionButton={
+    <div style={{ marginBottom: '2rem' }}>
+      <Control
+        type="text"
+        field="bibcode"
+        label="Bibliographic Code"
+        a11yPrefix="feedback"
+        placeholder="1999ApJ...511L..65Y"
+        ref={register}
+        errorMessage={
+          errors.bibcode
+            ? errors.bibcode.message
+            : error
+            ? error.message
+            : undefined
+        }
+        inputProps={{
+          onKeyUp: (e) => e.which === 13 && loadRecord(),
+        }}
+      />
+      <FlexView>
         <button
           type="button"
           onClick={loadRecord}
@@ -96,11 +101,13 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
           {isLoading ? (
             <i className="fa fa-spin fa-spinner" aria-hidden />
           ) : (
-            'Load Record'
+            <>
+              <i className="fa fa-folder-open-o" aria-hidden /> Load Record
+            </>
           )}
         </button>
-      }
-    />
+      </FlexView>
+    </div>
   );
 };
 
