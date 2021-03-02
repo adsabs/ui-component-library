@@ -1,7 +1,7 @@
 import React from 'react';
 import FlexView from 'react-flexview';
 import { useFormContext } from 'react-hook-form';
-import { Control, RecaptchaMessage } from '../components';
+import { Control } from '../components';
 import { MissingIncorrectRecordFormValues } from '../models';
 import BibcodeList from './BibcodeList';
 import FormPreview from './FormPreview';
@@ -42,7 +42,6 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
       </FlexView>
       <hr className="hr" />
       <FormPreview onSubmit={onSubmit} />
-      <RecaptchaMessage />
       <FormStatus />
     </React.Fragment>
   );

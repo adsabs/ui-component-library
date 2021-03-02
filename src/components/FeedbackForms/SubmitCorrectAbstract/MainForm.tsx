@@ -2,7 +2,7 @@ import React from 'react';
 import FlexView from 'react-flexview';
 import { useFormContext, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
-import { Control, RadioControl, RecaptchaMessage } from '../components';
+import { Control, RadioControl } from '../components';
 import {
   EntryType,
   entryTypeOptions,
@@ -69,7 +69,6 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
         onSubmit={onSubmit}
         disabled={entryType === EntryType.Edit && !isLoaded}
       />
-      <RecaptchaMessage />
       <FormStatus />
     </React.Fragment>
   );

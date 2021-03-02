@@ -53,17 +53,26 @@ const Recaptcha: React.FC<IRecaptchaProps> = ({ onSubmit, onCancel }) => {
 
   return (
     <>
-      <button
-        type="submit"
-        className="btn btn-primary g-recaptcha"
-        ref={el}
-        onClick={handleSubmit}
+      <div
+        className="btn-toolbar"
+        role="toolbar"
+        aria-label="Recaptcha submission toolbar"
       >
-        Submit
-      </button>
-      <button type="button" className="btn btn-default" onClick={onCancel}>
-        Cancel
-      </button>
+        <button
+          type="submit"
+          className="btn btn-primary g-recaptcha"
+          ref={el}
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+        <button type="button" className="btn btn-default" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <RecaptchaMessage />
+      </div>
     </>
   );
 };
