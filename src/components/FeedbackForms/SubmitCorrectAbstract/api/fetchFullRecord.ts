@@ -16,26 +16,48 @@ export type FullRecord = Omit<
   | 'recaptcha'
 >;
 
+const SKIP_URLS = [
+  'http://www.cfa.harvard.edu/sao',
+  'https://www.cfa.harvard.edu/',
+  'http://www.si.edu',
+  'http://www.nasa.gov',
+];
+
+/**
+ * Scrape the ESOURCE endpoint for URLs listed for this entity
+ * TODO: Currently filters out header and footer links, but should find a better way to
+ * do this in the future.
+ *
+ * @param identifier Bibcode or other article identifier
+ * @returns Array of URL objects including type and URL
+ */
 const getUrls = async (identifier: string): Promise<Url[]> => {
-  const reg = /href="([^"]*)"/gi;
+  // url regex, skip internal links
+  const reg = /href="(https?:\/\/[^"]*)"/gi;
   try {
     const body = await fetch(`link_gateway/${identifier}/ESOURCE`);
     const raw = await body.text();
     if (raw) {
-      return Array.from(
-        new Set(raw.matchAll(reg)),
-        (e) =>
-          ({
-            type: e[1].includes('arxiv')
-              ? 'arxiv'
-              : e[1].includes('pdf')
-              ? 'pdf'
-              : e[1].includes('doi')
-              ? 'doi'
-              : 'html',
-            value: e[1],
-          } as Url)
-      ).slice(1);
+      return (
+        Array.from(
+          new Set(raw.matchAll(reg)),
+          (e) =>
+            ({
+              type: e[1].includes('arxiv')
+                ? 'arxiv'
+                : e[1].includes('pdf')
+                ? 'pdf'
+                : e[1].includes('doi')
+                ? 'doi'
+                : 'html',
+              value: e[1],
+            } as Url)
+        )
+          .slice(1)
+
+          // filter out urls based on a skip list
+          .filter((url) => !SKIP_URLS.includes(url.value))
+      );
     }
   } catch (e) {
     // do not handle
