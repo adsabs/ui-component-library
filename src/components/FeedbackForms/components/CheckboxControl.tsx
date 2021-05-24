@@ -30,15 +30,47 @@ const CheckboxControl = React.forwardRef<Ref, CheckboxControlProps>(
         </label>
         {inline
           ? options.map(({ label: optionLabel, key: value }) => (
-              <label className="checkbox-inline" key={value}>
-                <input type="checkbox" name={field} value={value} ref={ref} />
-                {optionLabel}
-              </label>
+              <React.Fragment>
+                <label
+                  className="custom-checkbox"
+                  key={value}
+                  style={{ marginRight: '4px' }}
+                >
+                  <input
+                    id="{`${field}-${value}`}>{optionLabel}"
+                    type="checkbox"
+                    name={field}
+                    value={value}
+                    ref={ref}
+                  />
+                </label>
+                <label
+                  htmlFor={`${field}-${value}`}
+                  className="checkbox-inline"
+                  style={{ fontWeight: 'normal' }}
+                >
+                  {optionLabel}
+                </label>
+              </React.Fragment>
             ))
           : options.map(({ label: optionLabel, key: value }) => (
-              <div className="checkbox" key={value}>
-                <label>
-                  <input type="checkbox" name={field} value={value} ref={ref} />
+              <div key={value}>
+                <label
+                  className="custom-checkbox"
+                  style={{ marginRight: '4px' }}
+                >
+                  <input
+                    type="checkbox"
+                    id="{`${field}-${value}`}>{optionLabel}"
+                    name={field}
+                    value={value}
+                    ref={ref}
+                  />
+                </label>
+                <label
+                  htmlFor={`${field}-${value}`}
+                  style={{ fontWeight: 'normal' }}
+                >
                   {optionLabel}
                 </label>
               </div>
