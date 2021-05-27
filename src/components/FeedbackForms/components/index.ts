@@ -8,3 +8,4 @@ export { default as PreviewModal } from './PreviewModal';
 export { default as RadioControl } from './RadioControl';
 export { default as Recaptcha, RecaptchaMessage } from './Recaptcha';
 export { default as SelectControl } from './SelectControl';
+export { default as Checkbox } from './Checkbox';
