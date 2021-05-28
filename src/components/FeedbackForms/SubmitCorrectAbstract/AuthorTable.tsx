@@ -2,7 +2,7 @@ import React from 'react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { shallowEqual } from '../../../utils';
-import { Control, ModalButton } from '../components';
+import { Control, ModalButton, Checkbox } from '../components';
 import { Author, SubmitCorrectAbstractFormValues } from '../models';
 
 interface IModifyProps {
@@ -314,6 +314,7 @@ const AuthorTable: React.FC<IAuthorTableProps> = ({ onChange, authors }) => {
           selectableRows
           selectableRowsHighlight
           contextActions={contextActions}
+          selectableRowsComponent={Checkbox}
           onSelectedRowsChange={({ selectedRows }) => setSelected(selectedRows)}
           clearSelectedRows={clearRows}
         />
