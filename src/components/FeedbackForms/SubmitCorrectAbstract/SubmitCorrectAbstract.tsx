@@ -54,7 +54,7 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
     urls: Yup.array(
       Yup.object({
         type: Yup.mixed(),
-        value: Yup.string().url('Not a valid URL'),
+        value: Yup.string(),
       })
     ),
     abstract: Yup.string(),
