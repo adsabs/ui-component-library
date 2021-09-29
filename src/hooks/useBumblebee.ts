@@ -21,63 +21,72 @@ const useBumblebee = () => {
 
   return {
     app: bumblebeeGlobal.current,
-    publish: (event: PubSubEvent, ...args: any) => {
+    getAppConfig: React.useCallback(() => {
+      return bumblebeeGlobal.current.__beehive.getObject('DynamicConfig');
+    }, []),
+    publish: React.useCallback((event: PubSubEvent, ...args: any) => {
       const ps = bumblebeeGlobal.current.__beehive.getService('PubSub');
       return ps.publish(ps.getCurrentPubSubKey(), event, ...args);
-    },
-    subscribe: (event: PubSubEvent, callback: (event: string) => void) => {
-      const ps = bumblebeeGlobal.current.__beehive.getService('PubSub');
-      return ps.subscribe(ps.getCurrentPubSubKey(), event, callback);
-    },
-    unsubscribe: (event: PubSubEvent) => {
+    }, []),
+    subscribe: React.useCallback(
+      (event: PubSubEvent, callback: (event: string) => void) => {
+        const ps = bumblebeeGlobal.current.__beehive.getService('PubSub');
+        return ps.subscribe(ps.getCurrentPubSubKey(), event, callback);
+      },
+      []
+    ),
+    unsubscribe: React.useCallback((event: PubSubEvent) => {
       const ps = bumblebeeGlobal.current.__beehive.getService('PubSub');
       return ps.unsubscribe(ps.getCurrentPubSubKey(), event);
-    },
-    sendApiRequest: ({
-      options,
-      target,
-      query,
-    }: {
-      options?: any;
-      target: string;
-      query: any;
-    }) => {
-      return new Promise<JSONResponse>((resolve, reject) => {
-        const ps = bumblebeeGlobal.current.__beehive.getService('PubSub');
-        const {
-          makeApiQuery,
-          makeApiRequest,
-        } = bumblebeeGlobal.current.getObject('Utils');
-        const request = makeApiRequest({
-          target,
-          query: makeApiQuery(query),
-        });
+    }, []),
+    sendApiRequest: React.useCallback(
+      ({
+        options,
+        target,
+        query,
+      }: {
+        options?: any;
+        target: string;
+        query: any;
+      }) => {
+        return new Promise<JSONResponse>((resolve, reject) => {
+          const ps = bumblebeeGlobal.current.__beehive.getService('PubSub');
+          const {
+            makeApiQuery,
+            makeApiRequest,
+          } = bumblebeeGlobal.current.getObject('Utils');
+          const request = makeApiRequest({
+            target,
+            query: makeApiQuery(query),
+          });
 
-        request.set('options', {
-          done: (...args: any[]) => {
-            resolve(...args);
-          },
-          fail: (...args: any[]) => {
-            reject(...args);
-          },
-          contentType:
-            target === 'search/query'
-              ? 'application/x-www-form-urlencoded'
-              : options.contentType,
-          data:
-            target === 'search/query'
-              ? request.get('query').url()
-              : options.data,
-          ...options,
-        });
+          request.set('options', {
+            done: (response: JSONResponse) => {
+              resolve(response);
+            },
+            fail: (e: Error) => {
+              reject(e);
+            },
+            contentType:
+              target === 'search/query'
+                ? 'application/x-www-form-urlencoded'
+                : options.contentType,
+            data:
+              target === 'search/query'
+                ? request.get('query').url()
+                : options.data,
+            ...options,
+          });
 
-        ps.publish(
-          ps.getCurrentPubSubKey(),
-          PubSubEvent.EXECUTE_REQUEST,
-          request
-        );
-      });
-    },
+          ps.publish(
+            ps.getCurrentPubSubKey(),
+            PubSubEvent.EXECUTE_REQUEST,
+            request
+          );
+        });
+      },
+      []
+    ),
   };
 };
 

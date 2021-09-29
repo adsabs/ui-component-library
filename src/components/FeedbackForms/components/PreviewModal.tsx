@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, ModalProps } from 'react-bootstrap';
-import { Recaptcha } from '../components';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useFormContext } from 'react-hook-form';
+import { useBumblebee } from '../../../hooks';
 
 interface IPreviewModalProps extends ModalProps {
   onSubmit: () => void;
@@ -12,6 +14,8 @@ const PreviewModal: React.FunctionComponent<IPreviewModalProps> = ({
   children,
   ...modalProps
 }) => {
+  const [confirmed, setConfirmed] = React.useState(false);
+
   return (
     <Modal
       backdrop="static"
@@ -24,9 +28,53 @@ const PreviewModal: React.FunctionComponent<IPreviewModalProps> = ({
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
-        <Recaptcha onSubmit={onSubmit} onCancel={onCancel} />
+        <div
+          className="btn-toolbar"
+          role="toolbar"
+          aria-label="Recaptcha submission toolbar"
+          style={{ marginBottom: '1rem' }}
+        >
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={onSubmit}
+            disabled={!confirmed}
+          >
+            Submit
+          </button>
+          <button type="button" className="btn btn-default" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+        <Recaptcha onConfirm={() => setConfirmed(true)} />
       </Modal.Footer>
     </Modal>
+  );
+};
+
+const Recaptcha = ({ onConfirm }: { onConfirm: () => void }) => {
+  const { getAppConfig } = useBumblebee();
+  const { register, setValue } = useFormContext();
+  const siteKey = React.useMemo(() => getAppConfig().recaptchaKey, [
+    getAppConfig,
+  ]);
+  React.useEffect(() => register({ name: 'recaptcha' }, { required: true }));
+
+  const handleRecaptchaChange = (token: string | null) => {
+    if (typeof token === 'string') {
+      setValue('recaptcha', token);
+      if (typeof onConfirm === 'function') {
+        onConfirm();
+      }
+    }
+  };
+
+  return (
+    <ReCAPTCHA
+      size="normal"
+      sitekey={siteKey}
+      onChange={handleRecaptchaChange}
+    />
   );
 };
 
