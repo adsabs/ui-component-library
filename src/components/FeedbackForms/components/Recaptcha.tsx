@@ -11,7 +11,7 @@ interface IRecaptchaProps {
   onCancel(): void;
 }
 
-type ExecuteRef = () => void;
+type ExecuteRef = () => Promise<any>;
 
 const Recaptcha: React.FC<IRecaptchaProps> = ({ onSubmit, onCancel }) => {
   const el = React.useRef<HTMLButtonElement>(null);
@@ -19,7 +19,14 @@ const Recaptcha: React.FC<IRecaptchaProps> = ({ onSubmit, onCancel }) => {
   const { setValue, register, unregister } = useFormContext();
   const handleSubmit = () => {
     if (typeof execute.current === 'function') {
-      execute.current();
+      execute
+        .current()
+        .then((...args) => {
+          console.log(...args);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
   };
 
