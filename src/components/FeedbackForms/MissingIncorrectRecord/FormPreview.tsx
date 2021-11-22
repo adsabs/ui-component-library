@@ -52,8 +52,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
       const { bibcodes } = getValues();
       const bibcodeSet = new Set<string>();
       bibcodes.forEach(({ cited, citing }) => {
-        bibcodeSet.add(cited);
-        bibcodeSet.add(citing);
+        bibcodeSet.add(cited.trim());
+        bibcodeSet.add(citing.trim());
       });
       const uniqBibs = Array.from(bibcodeSet);
       setIds(uniqBibs);
@@ -70,14 +70,14 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
         const diff = ids.filter((e) => !bibs?.includes(e));
 
         bibcodes.forEach(({ citing, cited }, i) => {
-          if (diff.includes(citing)) {
+          if (diff.includes(citing.trim())) {
             setError(`bibcodes[${i}].citing`, {
               type: 'validate',
               message: "Bibcode wasn't found in ADS",
             });
           }
 
-          if (diff.includes(cited)) {
+          if (diff.includes(cited.trim())) {
             setError(`bibcodes[${i}].cited`, {
               type: 'validate',
               message: "Bibcode wasn't found in ADS",
@@ -178,8 +178,8 @@ const createFeedbackString = (
     name,
     email,
     references: bibcodes.map(({ citing, cited }, i) => ({
-      citing,
-      cited,
+      citing: citing.trim(),
+      cited: cited.trim(),
       refstring: referenceString[i],
     })),
   };
