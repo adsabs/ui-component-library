@@ -2,7 +2,7 @@ import React from 'react';
 import DataTable, { IDataTableColumn } from 'react-data-table-component';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { shallowEqual } from '../../../utils';
-import { Control, ModalButton, Checkbox } from '../components';
+import { Checkbox, Control, ModalButton } from '../components';
 import { Author, SubmitCorrectAbstractFormValues } from '../models';
 
 interface IModifyProps {
@@ -69,14 +69,7 @@ const Modify: React.FC<IModifyProps> = ({ author, onSubmit, authors }) => {
         onChange={handleChange}
         defaultValue={author.aff}
       />
-      <Control
-        type="text"
-        field="orcid"
-        label="ORCiD"
-        a11yPrefix="feedback"
-        onChange={handleChange}
-        defaultValue={author.orcid}
-      />
+      <OrcidControl onChange={handleChange} defaultValue={author.orcid} />
       <div className="form-group">
         <label htmlFor="feedback_author_position_spinner">Position</label>
         <input
@@ -92,6 +85,65 @@ const Modify: React.FC<IModifyProps> = ({ author, onSubmit, authors }) => {
         />
       </div>
     </ModalButton>
+  );
+};
+
+/**
+ * Editable ORCiD input
+ * This creates a toggle button wrapper around the ORCiD edit input
+ */
+const OrcidControl = ({
+  onChange,
+  defaultValue,
+}: {
+  onChange?: React.FormEventHandler<HTMLInputElement>;
+  defaultValue: string;
+}) => {
+  const [showOrcid, setShowOrcid] = React.useState(false);
+
+  const handleToggleOrcid = () => {
+    setShowOrcid(!showOrcid);
+  };
+
+  const cls = showOrcid
+    ? 'btn btn-default btn-xs active'
+    : 'btn btn-default btn-xs';
+
+  const faCls = showOrcid ? 'fa fa-chevron-down' : 'fa fa-chevron-right';
+  const buttonText = showOrcid ? 'Hide ORCiD' : 'Show ORCiD';
+
+  return (
+    <div className="form-group">
+      <label htmlFor="feedback-orcid">ORCiD</label>
+      <p className="text-small">
+        Correct publisher-provided ORCiD information here. To submit an ORCiD
+        claim,{' '}
+        <a href="/help/orcid/claiming-papers">use our ORCiD interface.</a>
+      </p>
+      <button
+        className={cls}
+        type="button"
+        role="switch"
+        id="toggle-orcid"
+        aria-checked={showOrcid}
+        onClick={handleToggleOrcid}
+      >
+        <i aria-hidden="true" className={faCls} /> {buttonText}
+      </button>
+      {showOrcid && (
+        <input
+          type="text"
+          className="form-control"
+          id="feedback-orcid"
+          aria-hidden={!showOrcid}
+          name="orcid"
+          onChange={onChange}
+          defaultValue={defaultValue}
+          style={{ marginTop: '1rem' }}
+          autoFocus
+        />
+      )}
+    </div>
   );
 };
 
