@@ -117,8 +117,8 @@ const OrcidControl = ({
       <label htmlFor="feedback-orcid">ORCiD</label>
       <p className="text-small">
         Correct publisher-provided ORCiD information here. To submit an ORCiD
-        claim, use our ORCiD interface.{' '}
-        <a href="/help/orcid/claiming-papers">Claiming papers in ORCiD</a>
+        claim,{' '}
+        <a href="/help/orcid/claiming-papers">use our ORCiD interface.</a>
       </p>
       <button
         className={cls}
