@@ -36,15 +36,7 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
     ),
     sourceBibcode: Yup.string()
       .required('Source bibcode is required')
-      .length(19, 'Invalid Bibcode')
-      .test('No non-arxiv bibcodes', 'Not an arXiv bibcode', function(
-        value: string
-      ) {
-        if (this.resolve(Yup.ref('relation')) === 'arxiv') {
-          return value.indexOf('arXiv') > -1;
-        }
-        return true;
-      }),
+      .length(19, 'Invalid Bibcode'),
     associated: Yup.array(
       Yup.object({
         bibcode: Yup.string()
