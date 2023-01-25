@@ -62,6 +62,14 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
     references: Yup.array(Yup.object().shape({ value: Yup.string() })),
     comments: Yup.string().ensure(),
     recaptcha: Yup.string().ensure(),
+    confirmNoAuthor: Yup.boolean().test(
+      'confirmNoAuthor',
+      'Please confirm, this abstract has no author(s)',
+      function(value) {
+        const hasAuthors = this?.parent?.authors?.length > 0;
+        return (value && !hasAuthors) || (!value && hasAuthors);
+      }
+    ),
   }
 );
 
@@ -81,6 +89,7 @@ export const defaultValues: SubmitCorrectAbstractFormValues = {
   references: [{ value: '' }],
   comments: '',
   recaptcha: '',
+  confirmNoAuthor: false,
 };
 
 export interface IOriginContext {
@@ -159,10 +168,6 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
     return () => clearTimeout(handle);
   }, [submissionState]);
 
-  const onSubmit = methods.handleSubmit((data) => {
-    console.log('submitted', data);
-  });
-
   return (
     <FormErrorBoundary>
       <FlexView column>
@@ -183,7 +188,7 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
           <FormSubmissionCtx.Provider value={submissionValue}>
             <OriginCtx.Provider value={value}>
               <form>
-                <MainForm onSubmit={onSubmit} />
+                <MainForm />
               </form>
             </OriginCtx.Provider>
           </FormSubmissionCtx.Provider>

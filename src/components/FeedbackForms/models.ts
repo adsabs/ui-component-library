@@ -160,4 +160,5 @@ export type SubmitCorrectAbstractFormValues = {
   references: Reference[];
   comments: string;
   recaptcha: string;
+  confirmNoAuthor: boolean;
 };

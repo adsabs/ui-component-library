@@ -113,6 +113,7 @@ const fetchFullRecord = _.memoize(
         authors,
         keywords: keywords.map((k) => ({ value: k })),
         urls,
+        confirmNoAuthor: false,
       };
     }
 
