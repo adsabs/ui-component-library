@@ -18,7 +18,7 @@ class FormErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <Container>
-          <h1>Sorry! there was an error, please reload the page.</h1>
+          <h4>Sorry! there was an error, please reload the page.</h4>
         </Container>
       );
     }
