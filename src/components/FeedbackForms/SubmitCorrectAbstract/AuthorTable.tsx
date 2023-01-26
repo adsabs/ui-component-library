@@ -380,9 +380,7 @@ interface IAuthorTableProps {
 }
 
 const Wrapper = () => {
-  const { setValue, register } = useFormContext<
-    SubmitCorrectAbstractFormValues
-  >();
+  const { setValue, register } = useFormContext();
 
   React.useEffect(() => {
     register({ name: 'authors' });

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { CheckboxControl, Control } from '../components';
 import { collectionOptions, SubmitCorrectAbstractFormValues } from '../models';
 import AuthorTable from './AuthorTable';
+import { ConfirmNoAuthorCheckbox } from './ConfirmNoAuthorCheckbox';
 import KeywordsList from './KeywordsList';
 import ReferencesList from './ReferencesList';
 import UrlsList from './UrlsList';
@@ -36,6 +37,7 @@ const RecordForm: React.FC<IRecordFormProps> = () => {
       />
       <Label>Authors</Label>
       <AuthorTable />
+      <ConfirmNoAuthorCheckbox />
       <Control
         type="text"
         field="publication"
