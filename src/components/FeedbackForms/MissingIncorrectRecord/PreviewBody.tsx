@@ -4,30 +4,24 @@ import { useFormContext } from 'react-hook-form';
 import { apiFetch, ApiTarget } from '../api';
 import { MissingIncorrectRecordFormValues } from '../models';
 
+const getRef = (bibcode: string, refs: string[]) => refs.find(ref => ref.startsWith(bibcode));
+
+
 export const generatePreview = (
   { bibcodes, email, name }: MissingIncorrectRecordFormValues,
   data: { export: string },
   ref: React.Ref<HTMLPreElement>
 ) => {
   if (data && data.export) {
+    const refs = data.export.split(/\n/g);
     return (
       <pre ref={ref}>
         {`From: ${name}
 Address: ${email}
 
 Missing references:
-${data.export
-  .split(/\n/g)
-  .map((reference, i) => {
-    if (reference.length > 0) {
-      return `${i + 1}:${i < 9 ? '  ' : ' '}${bibcodes[i].citing} -> ${
-        bibcodes[i].cited
-      } (${reference})`;
-    }
-    return undefined;
-  })
-  .join('\n')}`}
-      </pre>
+${bibcodes.map((entry, i) => `${i + 1}:${i < 9 ? '  ' : ' '}${entry.citing} -> ${getRef(entry.cited, refs) ?? ''}`).join('\n')}
+`}</pre>
     );
   } else {
     return 'Sorry, unable to generate preview (you can still submit)';
@@ -44,9 +38,9 @@ export const fetchReference = (
       contentType: 'application/json',
       data: JSON.stringify({
         bibcode: bibcodes.map((e) => e.cited),
-        format: ['%1l (%Y), %Q'],
-      }),
-    },
+        format: ['%R (%1l (%Y), %Q)']
+      })
+    }
   });
 };
 
@@ -55,6 +49,7 @@ const PreviewBody = React.forwardRef<HTMLPreElement>((_, ref) => {
 
   const fetchReferenceString = React.useCallback(() => {
     const { bibcodes } = getValues();
+
     return fetchReference(bibcodes);
   }, []);
 
