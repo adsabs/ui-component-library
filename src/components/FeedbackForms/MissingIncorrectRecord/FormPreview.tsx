@@ -34,6 +34,7 @@ const submitFeedback = async (data: FeedbackRequest) => {
 interface IFormPreview {
   onSubmit?: () => void;
 }
+
 const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
   const { getValues, setError, trigger, reset } = useFormContext<
     MissingIncorrectRecordFormValues
@@ -73,14 +74,14 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
           if (diff.includes(citing.trim())) {
             setError(`bibcodes[${i}].citing`, {
               type: 'validate',
-              message: "Bibcode wasn't found in ADS",
+              message: 'Bibcode wasn\'t found in ADS',
             });
           }
 
           if (diff.includes(cited.trim())) {
             setError(`bibcodes[${i}].cited`, {
               type: 'validate',
-              message: "Bibcode wasn't found in ADS",
+              message: 'Bibcode wasn\'t found in ADS',
             });
           }
         });
@@ -95,7 +96,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
       const values = getValues();
       const exportResponse = await fetchReference(values.bibcodes);
       await submitFeedback(
-        createFeedbackString(values, exportResponse?.export.split(/\n/g))
+        createFeedbackString(values, exportResponse?.export.split(/\n/g)),
       );
       if (typeof onSubmit === 'function') {
         onSubmit();
@@ -167,7 +168,7 @@ type FeedbackRequest = {
 
 const createFeedbackString = (
   props: MissingIncorrectRecordFormValues,
-  referenceString: string[]
+  referenceString: string[],
 ): FeedbackRequest => {
   const { name, email, bibcodes, recaptcha } = props;
 

@@ -1,7 +1,7 @@
-import React, { ErrorInfo } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import styled from 'styled-components';
 
-class FormErrorBoundary extends React.Component {
+class FormErrorBoundary extends React.Component<{ msg?: ReactNode }> {
   public state = {
     hasError: false,
   };
@@ -11,11 +11,14 @@ class FormErrorBoundary extends React.Component {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[error]: ', error, errorInfo);
+    // console.error('[error]: ', error, errorInfo);
   }
 
   public render() {
     if (this.state.hasError) {
+      if (this.props.msg) {
+        return this.props.msg;
+      }
       return (
         <Container>
           <h4>Sorry! there was an error, please reload the page.</h4>

@@ -5,6 +5,7 @@ interface LabelProps {
   children: React.ReactNode;
   required: boolean;
 }
+
 const Label: React.FC<LabelProps> = ({ htmlFor, children, required }) => {
   return (
     <label htmlFor={htmlFor} className="control-label">
@@ -39,6 +40,7 @@ export interface IControlProps {
   actionButtonPos?: 'start' | 'end';
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
+
 const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
   const {
     type,

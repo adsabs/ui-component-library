@@ -35,7 +35,7 @@ const getUrls = async (identifier: string): Promise<Url[]> => {
   // url regex, skip internal links
   const reg = /href="(https?:\/\/[^"]*)"/gi;
   try {
-    const body = await fetch(`link_gateway/${identifier}/ESOURCE`);
+    const body = await fetch(`link_gateway/${encodeURIComponent(identifier)}/ESOURCE`);
     const raw = await body.text();
     if (raw) {
       return (
@@ -46,12 +46,12 @@ const getUrls = async (identifier: string): Promise<Url[]> => {
               type: e[1].includes('arxiv')
                 ? 'arxiv'
                 : e[1].includes('pdf')
-                ? 'pdf'
-                : e[1].includes('doi')
-                ? 'doi'
-                : 'html',
+                  ? 'pdf'
+                  : e[1].includes('doi')
+                    ? 'doi'
+                    : 'html',
               value: e[1],
-            } as Url)
+            } as Url),
         )
           .slice(1)
 
@@ -118,7 +118,7 @@ const fetchFullRecord = _.memoize(
     }
 
     throw new Error('No Result for this bibcode');
-  }
+  },
 );
 
 export default fetchFullRecord;

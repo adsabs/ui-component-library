@@ -12,6 +12,7 @@ import UrlsList from './UrlsList';
 export interface IRecordFormProps {
   edit?: boolean;
 }
+
 const RecordForm: React.FC<IRecordFormProps> = () => {
   const { register, errors } = useFormContext<
     SubmitCorrectAbstractFormValues

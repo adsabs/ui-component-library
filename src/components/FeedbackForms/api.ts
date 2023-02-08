@@ -37,6 +37,7 @@ interface IApiFetchProps {
   target: string;
   query?: Query;
 }
+
 export const apiFetch = (props: IApiFetchProps) => {
   const { options, target, query } = props;
 
@@ -102,7 +103,7 @@ export enum ApiTarget {
   CHANGE_EMAIL = 'accounts/change-email',
   RECOMMENDER = 'recommender',
   GRAPHICS = 'graphics',
-  FEEDBACK = "feedback/userfeedback",
+  FEEDBACK = 'feedback/userfeedback',
   LIBRARY_IMPORT_CLASSIC_AUTH = 'harbour/auth/classic',
   LIBRARY_IMPORT_CLASSIC_MIRRORS = 'harbour/mirrors',
   LIBRARY_IMPORT_CLASSIC_TO_BBB = 'biblib/classic',

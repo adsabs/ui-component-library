@@ -13,8 +13,10 @@ const Nav = styled.nav`
 
 export interface ITabContext {
   activeTab: string;
+
   setActiveTab(label: string): void;
 }
+
 const [useCtx, TabProvider] = createCtx<ITabContext>();
 
 interface ITabsComposition {
@@ -64,6 +66,7 @@ export interface ITabProps {
   label: string;
   component: React.ReactNode;
 }
+
 const Tab: React.FC<ITabProps> = React.memo(({ label }) => {
   const { activeTab, setActiveTab } = useCtx();
 

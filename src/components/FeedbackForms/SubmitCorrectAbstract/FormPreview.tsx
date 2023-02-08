@@ -5,11 +5,7 @@ import { PreviewModal } from '../components';
 import { EntryType, SubmitCorrectAbstractFormValues } from '../models';
 import { createDiffString, ProcessedFormValues, processTree } from './DiffView';
 import PreviewBody from './PreviewBody';
-import {
-  defaultValues,
-  FormSubmissionCtx,
-  OriginCtx,
-} from './SubmitCorrectAbstract';
+import { defaultValues, FormSubmissionCtx, OriginCtx } from './SubmitCorrectAbstract';
 
 type FeedbackRequest = {
   original: ProcessedFormValues;
@@ -38,6 +34,7 @@ interface IFormPreview {
   onSubmit?: () => void;
   disabled?: boolean;
 }
+
 const FormPreview: React.FunctionComponent<IFormPreview> = ({
   onSubmit,
   disabled = false,
@@ -70,8 +67,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           createFeedbackString(
             origin,
             currentValues,
-            encodeURIComponent(createDiffString(origin, currentValues))
-          )
+            getSafeDiff(origin, currentValues),
+          ),
         );
         if (typeof onSubmit === 'function') {
           onSubmit();
@@ -84,7 +81,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           status: 'error',
           message: e?.responseJSON?.message,
           code: e?.status,
-          changes: encodeURIComponent(createDiffString(origin, currentValues)),
+          changes: getSafeDiff(origin, currentValues),
         });
       }
     }
@@ -124,11 +121,19 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
   );
 };
 
-declare var _: any;
+
+const getSafeDiff = (src: SubmitCorrectAbstractFormValues, curr: SubmitCorrectAbstractFormValues) => {
+  try {
+    return encodeURIComponent(createDiffString(src, curr));
+  } catch (e) {
+    return 'Unable to generate diff';
+  }
+};
+
 const createFeedbackString = (
   original: SubmitCorrectAbstractFormValues,
   current: SubmitCorrectAbstractFormValues,
-  previewText: string
+  previewText: string,
 ): FeedbackRequest => {
   const { name, email, recaptcha, entryType } = current;
   return {

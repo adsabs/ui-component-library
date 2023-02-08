@@ -33,7 +33,7 @@ const FormStatus: React.FunctionComponent = () => {
   }
 
   if (submissionState?.status === 'error') {
-    if (submissionState.code === 500 || submissionState.code === 404) {
+    if (submissionState.code === 500 || submissionState.code >= 400 && submissionState.code <= 499) {
       return (
         <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
           There was an error processing the request, please try again, or send

@@ -5,11 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { Control } from '../components';
 import { SubmitCorrectAbstractFormValues } from '../models';
 import { fetchFullRecord, FullRecord } from './api';
-import {
-  defaultValues,
-  IOriginContext,
-  OriginCtx,
-} from './SubmitCorrectAbstract';
+import { defaultValues, IOriginContext, OriginCtx } from './SubmitCorrectAbstract';
 
 interface IBibcodeLoadedBtnProps {
   onLoaded: () => void;
@@ -84,8 +80,8 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
           errors.bibcode
             ? errors.bibcode.message
             : error
-            ? error.message
-            : undefined
+              ? error.message
+              : undefined
         }
         inputProps={{
           onKeyUp: (e) => e.which === 13 && loadRecord(),

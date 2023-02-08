@@ -15,6 +15,7 @@ export interface CheckboxControlProps {
   options: CheckboxOption[];
   inline?: boolean;
 }
+
 const CheckboxControl = React.forwardRef<Ref, CheckboxControlProps>(
   (props, ref) => {
     const { field, label, a11yPrefix, inline, helpMessage, options } = props;
@@ -30,56 +31,56 @@ const CheckboxControl = React.forwardRef<Ref, CheckboxControlProps>(
         </label>
         {inline
           ? options.map(({ label: optionLabel, key: value }) => (
-              <React.Fragment>
-                <label
-                  className="custom-checkbox"
-                  key={value}
-                  style={{ marginRight: '4px' }}
-                >
-                  <input
-                    id="{`${field}-${value}`}>{optionLabel}"
-                    type="checkbox"
-                    name={field}
-                    value={value}
-                    ref={ref}
-                  />
-                </label>
-                <label
-                  htmlFor={`${field}-${value}`}
-                  className="checkbox-inline"
-                  style={{ fontWeight: 'normal' }}
-                >
-                  {optionLabel}
-                </label>
-              </React.Fragment>
-            ))
+            <React.Fragment>
+              <label
+                className="custom-checkbox"
+                key={value}
+                style={{ marginRight: '4px' }}
+              >
+                <input
+                  id="{`${field}-${value}`}>{optionLabel}"
+                  type="checkbox"
+                  name={field}
+                  value={value}
+                  ref={ref}
+                />
+              </label>
+              <label
+                htmlFor={`${field}-${value}`}
+                className="checkbox-inline"
+                style={{ fontWeight: 'normal' }}
+              >
+                {optionLabel}
+              </label>
+            </React.Fragment>
+          ))
           : options.map(({ label: optionLabel, key: value }) => (
-              <div key={value}>
-                <label
-                  className="custom-checkbox"
-                  style={{ marginRight: '4px' }}
-                >
-                  <input
-                    type="checkbox"
-                    id="{`${field}-${value}`}>{optionLabel}"
-                    name={field}
-                    value={value}
-                    ref={ref}
-                  />
-                </label>
-                <label
-                  htmlFor={`${field}-${value}`}
-                  style={{ fontWeight: 'normal' }}
-                >
-                  {optionLabel}
-                </label>
-              </div>
-            ))}
+            <div key={value}>
+              <label
+                className="custom-checkbox"
+                style={{ marginRight: '4px' }}
+              >
+                <input
+                  type="checkbox"
+                  id="{`${field}-${value}`}>{optionLabel}"
+                  name={field}
+                  value={value}
+                  ref={ref}
+                />
+              </label>
+              <label
+                htmlFor={`${field}-${value}`}
+                style={{ fontWeight: 'normal' }}
+              >
+                {optionLabel}
+              </label>
+            </div>
+          ))}
 
         {helpMessage && <span className="help-block">{helpMessage}</span>}
       </div>
     );
-  }
+  },
 );
 
 export default CheckboxControl;

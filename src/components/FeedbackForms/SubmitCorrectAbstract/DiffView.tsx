@@ -7,6 +7,7 @@ interface IDiffViewProps {
   left: SubmitCorrectAbstractFormValues;
   right: SubmitCorrectAbstractFormValues;
 }
+
 const DiffView: React.FC<IDiffViewProps> = React.memo(
   ({ left, right }) => {
     const leftObj = processTree(left);
@@ -54,7 +55,7 @@ const DiffView: React.FC<IDiffViewProps> = React.memo(
     );
   },
   (prevProps, nextProps) =>
-    JSON.stringify(prevProps) !== JSON.stringify(nextProps)
+    JSON.stringify(prevProps) !== JSON.stringify(nextProps),
 );
 
 interface ITextChangeElementProps {
@@ -62,6 +63,7 @@ interface ITextChangeElementProps {
   changes: Change[];
   right: ProcessedFormValues;
 }
+
 const TextChanges = ({ keyProp, changes, right }: ITextChangeElementProps) => {
   return (
     <>
@@ -86,6 +88,7 @@ interface IArrayChangeElementProps {
   keyProp: string;
   changes: ArrayChange<string>[];
 }
+
 const ArrayChanges = ({ keyProp, changes }: IArrayChangeElementProps) => {
   let i = 0;
   return (
@@ -98,8 +101,8 @@ const ArrayChanges = ({ keyProp, changes }: IArrayChangeElementProps) => {
             ...val,
             ...change.value.map((v, idx) => (
               <Add key={`${keyProp} ${idx + currentCount}`}>{`+ ${idx +
-                currentCount +
-                1} ${v}`}</Add>
+              currentCount +
+              1} ${v}`}</Add>
             )),
           ];
         } else if (change.removed) {
@@ -107,8 +110,8 @@ const ArrayChanges = ({ keyProp, changes }: IArrayChangeElementProps) => {
             ...val,
             ...change.value.map((v, idx) => (
               <Remove key={`${keyProp} ${i + idx}`}>{`- ${i +
-                idx +
-                1} ${v}`}</Remove>
+              idx +
+              1} ${v}`}</Remove>
             )),
           ];
         }
@@ -127,20 +130,20 @@ const Add = styled.p`
   color: green;
   margin: 0;
   display: ${(props: { inline?: boolean }) =>
-    props.inline ? 'inline' : 'block'};
+  props.inline ? 'inline' : 'block'};
 `;
 
 const Remove = styled.p`
   color: red;
   margin: 0;
   display: ${(props: { inline?: boolean }) =>
-    props.inline ? 'inline' : 'block'};
+  props.inline ? 'inline' : 'block'};
 `;
 
 const Text = styled.p`
   margin: 0;
   display: ${(props: { inline?: boolean }) =>
-    props.inline ? 'inline' : 'block'};
+  props.inline ? 'inline' : 'block'};
 `;
 
 const SectionTitle = styled.div`
@@ -168,7 +171,7 @@ export interface ProcessedFormValues {
 }
 
 export const processTree = (
-  obj: SubmitCorrectAbstractFormValues
+  obj: SubmitCorrectAbstractFormValues,
 ): ProcessedFormValues => {
   const {
     name,
@@ -234,7 +237,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
       // actual change made to multiple entries in a row, they are matched by index, not sequential
 
       out.push(
-        `${index} ${strikeText(entries[i].value)}${entries[i + count].value}`
+        `${index} ${strikeText(entries[i].value)}${entries[i + count].value}`,
       );
       entries[i + count] = {
         count: entries[i + count].count,
@@ -292,7 +295,7 @@ const stringifyWordChanges = (changes: Change[]) => {
 
 export function createDiffString(
   left: SubmitCorrectAbstractFormValues,
-  right: SubmitCorrectAbstractFormValues
+  right: SubmitCorrectAbstractFormValues,
 ) {
   const leftObj = processTree(left);
   const rightObj = processTree(right);
@@ -320,10 +323,10 @@ export function createDiffString(
     return `
   >>>> ${sectionTitle}
   ${
-    isArray
-      ? stringifyArrayChanges(changes as ArrayChange<string>[])
-      : stringifyWordChanges(changes as Change[])
-  }
+      isArray
+        ? stringifyArrayChanges(changes as ArrayChange<string>[])
+        : stringifyWordChanges(changes as Change[])
+    }
   <<<<`;
   });
 

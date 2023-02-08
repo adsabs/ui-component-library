@@ -7,12 +7,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FormErrorBoundary } from '../components';
-import {
-  Collection,
-  EntryType,
-  ReduxState,
-  SubmitCorrectAbstractFormValues,
-} from '../models';
+import { Collection, EntryType, ReduxState, SubmitCorrectAbstractFormValues } from '../models';
 import MainForm from './MainForm';
 
 const Heading = styled.h2`
@@ -36,7 +31,7 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
         name: Yup.string(),
         aff: Yup.string(),
         orcid: Yup.string(),
-      })
+      }),
     ),
     publication: Yup.string().required('Publication information is required'),
     publicationDate: Yup.string()
@@ -47,15 +42,15 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
           moment(
             value,
             ['YYYY-MM', 'YYYY-MM-DD', 'YYYY-00', 'YYYY-00-00', 'YYYY-MM-00'],
-            true
-          ).isValid()
+            true,
+          ).isValid(),
       )
       .required('Publication date is required'),
     urls: Yup.array(
       Yup.object({
         type: Yup.mixed(),
         value: Yup.string(),
-      })
+      }),
     ),
     abstract: Yup.string(),
     keywords: Yup.array(Yup.object().shape({ value: Yup.string() })),
@@ -68,9 +63,9 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
       function(value) {
         const hasAuthors = this?.parent?.authors?.length > 0;
         return (value && !hasAuthors) || (!value && hasAuthors);
-      }
+      },
     ),
-  }
+  },
 );
 
 export const defaultValues: SubmitCorrectAbstractFormValues = {
@@ -96,6 +91,7 @@ export interface IOriginContext {
   origin: SubmitCorrectAbstractFormValues;
   setOrigin: (values: SubmitCorrectAbstractFormValues) => void;
 }
+
 export const OriginCtx = React.createContext<IOriginContext>({
   origin: defaultValues,
   setOrigin: () => null,
@@ -106,10 +102,12 @@ export type SubmissionState =
   | { status: 'error'; message: string; code: number; changes: string }
   | { status: 'success' }
   | null;
+
 export interface IFormSubmissionCtx {
   submissionState: SubmissionState;
   setSubmissionState: (state: SubmissionState) => void;
 }
+
 export const FormSubmissionCtx = React.createContext<IFormSubmissionCtx>({
   submissionState: null,
   setSubmissionState: () => null,
@@ -143,16 +141,16 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
   });
 
   const [origin, setOrigin] = React.useState<SubmitCorrectAbstractFormValues>(
-    initialValues
+    initialValues,
   );
   const value = React.useMemo(() => ({ origin, setOrigin }), [origin]);
 
   const [submissionState, setSubmissionState] = React.useState<SubmissionState>(
-    null
+    null,
   );
   const submissionValue = React.useMemo(
     () => ({ submissionState, setSubmissionState }),
-    [submissionState]
+    [submissionState],
   );
 
   // reset submission state
@@ -162,7 +160,7 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
       handle = setTimeout(
         setSubmissionState,
         submissionState.status === 'success' ? 3000 : 10000,
-        null
+        null,
       );
     }
     return () => clearTimeout(handle);

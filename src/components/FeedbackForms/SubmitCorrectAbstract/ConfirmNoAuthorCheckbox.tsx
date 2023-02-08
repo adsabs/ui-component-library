@@ -4,7 +4,8 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
 import { SubmitCorrectAbstractFormValues } from '../models';
 
-interface IConfirmNoAuthorCheckbox {}
+interface IConfirmNoAuthorCheckbox {
+}
 
 export const ConfirmNoAuthorCheckbox: FC<IConfirmNoAuthorCheckbox> = () => {
   const { control, register, setValue, unregister, errors } = useFormContext();

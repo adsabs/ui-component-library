@@ -1,13 +1,14 @@
 import React from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import FlexView from 'react-flexview';
 import styled from 'styled-components';
 import { Control } from '../components';
-import { SubmitCorrectAbstractFormValues, Keyword } from '../models';
+import { Keyword, SubmitCorrectAbstractFormValues } from '../models';
 
 interface IControlRow {
   count: number;
 }
+
 const ControlRow = styled.div<IControlRow>`
   display: flex;
   & > * {
@@ -52,7 +53,7 @@ const KeywordsList: React.FC = () => {
       }
       return;
     },
-    [errors]
+    [errors],
   );
 
   return (

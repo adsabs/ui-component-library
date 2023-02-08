@@ -15,6 +15,7 @@ export interface RadioControlProps {
   options: RadioOption[];
   inline?: boolean;
 }
+
 const RadioControl = React.forwardRef<Ref, RadioControlProps>((props, ref) => {
   const { field, label, a11yPrefix, inline, helpMessage, options } = props;
   const labelId = `${a11yPrefix}_${field}_radio`;
@@ -29,19 +30,19 @@ const RadioControl = React.forwardRef<Ref, RadioControlProps>((props, ref) => {
       </label>
       {inline
         ? options.map(({ label: optionLabel, key: value }) => (
-            <label className="radio-inline custom-radio" key={value}>
+          <label className="radio-inline custom-radio" key={value}>
+            <input type="radio" name={field} value={value} ref={ref} />
+            {optionLabel}
+          </label>
+        ))
+        : options.map(({ label: optionLabel, key: value }) => (
+          <div className="radio" key={value}>
+            <label className="custom-radio">
               <input type="radio" name={field} value={value} ref={ref} />
               {optionLabel}
             </label>
-          ))
-        : options.map(({ label: optionLabel, key: value }) => (
-            <div className="radio" key={value}>
-              <label className="custom-radio">
-                <input type="radio" name={field} value={value} ref={ref} />
-                {optionLabel}
-              </label>
-            </div>
-          ))}
+          </div>
+        ))}
 
       {helpMessage && <span className="help-block">{helpMessage}</span>}
     </div>

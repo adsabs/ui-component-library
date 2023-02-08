@@ -8,6 +8,7 @@ import { SubmitCorrectAbstractFormValues } from '../models';
 interface IControlRow {
   count: number;
 }
+
 const ControlRow = styled.div<IControlRow>`
   display: flex;
   & > * {
@@ -52,7 +53,7 @@ const KeywordsList: React.FC = () => {
       }
       return;
     },
-    [errors]
+    [errors],
   );
 
   return (

@@ -6,11 +6,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FormErrorBoundary } from '../components';
-import {
-  AssociatedArticlesFormValues,
-  ReduxState,
-  relationOptions,
-} from '../models';
+import { AssociatedArticlesFormValues, ReduxState, relationOptions } from '../models';
 import MainForm from './MainForm';
 
 const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.object().shape(
@@ -21,7 +17,7 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
       .required('Required'),
     relation: Yup.mixed().oneOf(
       relationOptions.map(({ key }) => key),
-      'Must select a relation'
+      'Must select a relation',
     ),
     customRelation: Yup.string().test(
       'customRelationRequired',
@@ -32,7 +28,7 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
           return false;
         }
         return true;
-      }
+      },
     ),
     sourceBibcode: Yup.string()
       .required('Source bibcode is required')
@@ -42,10 +38,10 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
         bibcode: Yup.string()
           .required('Associated bibcode is blank')
           .length(19, 'Invalid Bibcode'),
-      })
+      }),
     ),
     recaptcha: Yup.string().ensure(),
-  }
+  },
 );
 
 export const defaultValues: AssociatedArticlesFormValues = {
@@ -62,7 +58,7 @@ const emailSelector = ({ user }: ReduxState) => user.email;
 
 const AssociatedReferences: React.FunctionComponent = () => {
   const email = useSelector<ReduxState, AssociatedArticlesFormValues['email']>(
-    emailSelector
+    emailSelector,
   );
 
   const methods = useForm<AssociatedArticlesFormValues>({

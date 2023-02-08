@@ -6,6 +6,7 @@ interface IPreviewModalProps extends ModalProps {
   onSubmit: () => void;
   onCancel: () => void;
 }
+
 const PreviewModal: React.FunctionComponent<IPreviewModalProps> = ({
   onSubmit,
   onCancel,

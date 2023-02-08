@@ -36,13 +36,13 @@ const validationSchema: Yup.ObjectSchema<MissingIncorrectRecordFormValues> = Yup
               'Bibcode is same as citing',
               function() {
                 return this.parent.citing !== this.parent.cited;
-              }
+              },
             ),
-        })
+        }),
       )
       .ensure(),
     recaptcha: Yup.string().ensure(),
-  }
+  },
 );
 
 const emailSelector = ({ user }: ReduxState) => user.email;

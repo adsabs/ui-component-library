@@ -3,16 +3,12 @@ import FlexView from 'react-flexview';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 import { Control, SelectControl } from '../components';
-import {
-  EntryType,
-  Reference,
-  referenceOptions,
-  SubmitCorrectAbstractFormValues,
-} from '../models';
+import { EntryType, Reference, referenceOptions, SubmitCorrectAbstractFormValues } from '../models';
 
 interface IControlRow {
   count: number;
 }
+
 const ControlRow = styled.div<IControlRow>`
   display: flex;
   justify-content: flex-start;
@@ -67,7 +63,7 @@ const ReferencesList: React.FC = () => {
       }
       return;
     },
-    [errors]
+    [errors],
   );
 
   return (

@@ -3,11 +3,7 @@ import FlexView from 'react-flexview';
 import { useFormContext, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
 import { Control, RadioControl } from '../components';
-import {
-  EntryType,
-  entryTypeOptions,
-  SubmitCorrectAbstractFormValues,
-} from '../models';
+import { EntryType, entryTypeOptions, SubmitCorrectAbstractFormValues } from '../models';
 import BibcodeLoaderBtn from './BibcodeLoaderBtn';
 import FormPreview from './FormPreview';
 import FormStatus from './FormStatus';
@@ -16,6 +12,7 @@ import RecordForm from './RecordForm';
 interface IMainFormProps {
   onSubmit?: () => void;
 }
+
 const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   const { register, errors, control } = useFormContext<
     SubmitCorrectAbstractFormValues
@@ -29,6 +26,7 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
 
   return (
     <React.Fragment>
+      <FormStatus />
       <FlexView column>
         <Control
           type="text"
@@ -76,8 +74,10 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
 
 interface INewEditRadiosProps {
   onChange(value: string): void;
+
   defaultValue: string;
 }
+
 const NewEditRadios: React.FC<INewEditRadiosProps> = ({
   onChange,
   defaultValue,
@@ -87,7 +87,7 @@ const NewEditRadios: React.FC<INewEditRadiosProps> = ({
     (e: React.FormEvent<HTMLInputElement>) => {
       setVal(e.currentTarget.name);
     },
-    []
+    [],
   );
 
   React.useEffect(() => {
@@ -98,7 +98,7 @@ const NewEditRadios: React.FC<INewEditRadiosProps> = ({
     <div
       role="radio-group"
       className="form-group"
-      aria-aria-labelledby="feedback-entry-type"
+      aria-labelledby="feedback-entry-type"
     >
       <RadioTitle id="feedback-entry-type">Record Type</RadioTitle>
       <label className="radio-inline">

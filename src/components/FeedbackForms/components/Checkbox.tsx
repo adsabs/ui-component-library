@@ -1,6 +1,7 @@
 import React from 'react';
 
 export type Ref = HTMLInputElement;
+
 export interface CheckboxProps {
   onClick: (...event: any[]) => void;
 }
@@ -15,7 +16,7 @@ const Checkbox = React.forwardRef<Ref, CheckboxProps>(
         {...rest}
       />
     </label>
-  )
+  ),
 );
 
 export default Checkbox;

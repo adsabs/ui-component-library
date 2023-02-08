@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormContext, useFieldArray, useWatch } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import FlexView from 'react-flexview';
 import PropTypes from 'prop-types';
 import { AssociatedArticlesFormValues } from '../models';
@@ -32,7 +32,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
   const getErrorMessage = (
     index: number,
     field: string,
-    innerField: string
+    innerField: string,
   ): string | undefined => {
     return errors?.[field]?.[index]?.[innerField]?.message;
   };
@@ -40,7 +40,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
   // get the placeholder based on the type of relation
   const relation = useWatch<AssociatedArticlesFormValues['relation']>({
     name: 'relation',
-    defaultValue: 'none'
+    defaultValue: 'none',
   });
   const placeholder = getBibcodePlaceholder(relation);
 
@@ -114,7 +114,7 @@ BibcodeList.propTypes = {
 };
 
 const getBibcodePlaceholder = (
-  type: AssociatedArticlesFormValues['relation']
+  type: AssociatedArticlesFormValues['relation'],
 ) => {
   switch (type) {
     case 'arxiv':
