@@ -6,7 +6,7 @@ import { Control, RadioControl } from '../components';
 import {
   EntryType,
   entryTypeOptions,
-  SubmitCorrectAbstractFormValues,
+  SubmitCorrectAbstractFormValues
 } from '../models';
 import BibcodeLoaderBtn from './BibcodeLoaderBtn';
 import FormPreview from './FormPreview';
@@ -16,6 +16,7 @@ import RecordForm from './RecordForm';
 interface IMainFormProps {
   onSubmit?: () => void;
 }
+
 const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   const { register, errors, control } = useFormContext<
     SubmitCorrectAbstractFormValues
@@ -24,11 +25,12 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const entryType = useWatch<SubmitCorrectAbstractFormValues['entryType']>({
     control,
-    name: 'entryType',
+    name: 'entryType'
   });
 
   return (
     <React.Fragment>
+      <FormStatus />
       <FlexView column>
         <Control
           type="text"
@@ -76,12 +78,14 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
 
 interface INewEditRadiosProps {
   onChange(value: string): void;
+
   defaultValue: string;
 }
+
 const NewEditRadios: React.FC<INewEditRadiosProps> = ({
-  onChange,
-  defaultValue,
-}) => {
+                                                        onChange,
+                                                        defaultValue
+                                                      }) => {
   const [val, setVal] = React.useState(defaultValue);
   const handleChange = React.useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
@@ -98,7 +102,7 @@ const NewEditRadios: React.FC<INewEditRadiosProps> = ({
     <div
       role="radio-group"
       className="form-group"
-      aria-aria-labelledby="feedback-entry-type"
+      aria-labelledby="feedback-entry-type"
     >
       <RadioTitle id="feedback-entry-type">Record Type</RadioTitle>
       <label className="radio-inline">
@@ -125,7 +129,7 @@ const NewEditRadios: React.FC<INewEditRadiosProps> = ({
 
 NewEditRadios.defaultProps = {
   onChange: () => null,
-  defaultValue: 'new',
+  defaultValue: 'new'
 };
 
 const RadioTitle = styled.h3`
