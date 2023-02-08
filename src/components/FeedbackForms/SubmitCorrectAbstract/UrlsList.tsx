@@ -1,8 +1,8 @@
 import React from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import FlexView from 'react-flexview';
 import styled from 'styled-components';
-import { urlOptions, SubmitCorrectAbstractFormValues, Url } from '../models';
+import { SubmitCorrectAbstractFormValues, Url, urlOptions } from '../models';
 import { Control, SelectControl } from '../components';
 
 const ControlRow = styled.div`
@@ -56,7 +56,7 @@ const UrlsList: React.FC = () => {
       }
       return;
     },
-    [errors]
+    [errors],
   );
 
   return (

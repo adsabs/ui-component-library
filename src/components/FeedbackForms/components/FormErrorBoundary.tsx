@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 class FormErrorBoundary extends React.Component<{ msg?: ReactNode }> {
   public state = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError() {

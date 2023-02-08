@@ -10,7 +10,7 @@ const getRef = (bibcode: string, refs: string[]) => refs.find(ref => ref.startsW
 export const generatePreview = (
   { bibcodes, email, name }: MissingIncorrectRecordFormValues,
   data: { export: string },
-  ref: React.Ref<HTMLPreElement>
+  ref: React.Ref<HTMLPreElement>,
 ) => {
   if (data && data.export) {
     const refs = data.export.split(/\n/g);
@@ -29,7 +29,7 @@ ${bibcodes.map((entry, i) => `${i + 1}:${i < 9 ? '  ' : ' '}${entry.citing} -> $
 };
 
 export const fetchReference = (
-  bibcodes: MissingIncorrectRecordFormValues['bibcodes']
+  bibcodes: MissingIncorrectRecordFormValues['bibcodes'],
 ) => {
   return apiFetch({
     target: ApiTarget.EXPORT + 'custom',
@@ -38,9 +38,9 @@ export const fetchReference = (
       contentType: 'application/json',
       data: JSON.stringify({
         bibcode: bibcodes.map((e) => e.cited),
-        format: ['%R (%1l (%Y), %Q)']
-      })
-    }
+        format: ['%R (%1l (%Y), %Q)'],
+      }),
+    },
   });
 };
 

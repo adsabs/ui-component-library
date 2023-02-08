@@ -5,11 +5,7 @@ import { PreviewModal } from '../components';
 import { EntryType, SubmitCorrectAbstractFormValues } from '../models';
 import { createDiffString, ProcessedFormValues, processTree } from './DiffView';
 import PreviewBody from './PreviewBody';
-import {
-  defaultValues,
-  FormSubmissionCtx,
-  OriginCtx
-} from './SubmitCorrectAbstract';
+import { defaultValues, FormSubmissionCtx, OriginCtx } from './SubmitCorrectAbstract';
 
 type FeedbackRequest = {
   original: ProcessedFormValues;
@@ -29,8 +25,8 @@ const submitFeedback = async (data: FeedbackRequest) => {
       method: 'POST',
       data: JSON.stringify(data),
       dataType: 'json',
-      contentType: 'application/json; charset=UTF-8'
-    }
+      contentType: 'application/json; charset=UTF-8',
+    },
   });
 };
 
@@ -40,9 +36,9 @@ interface IFormPreview {
 }
 
 const FormPreview: React.FunctionComponent<IFormPreview> = ({
-                                                              onSubmit,
-                                                              disabled = false
-                                                            }) => {
+  onSubmit,
+  disabled = false,
+}) => {
   const { trigger, getValues, reset } = useFormContext<
     SubmitCorrectAbstractFormValues
   >();
@@ -63,7 +59,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
     if (previewRef.current) {
       const currentValues = {
         ...origin,
-        ...getValues()
+        ...getValues(),
       };
 
       try {
@@ -71,8 +67,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           createFeedbackString(
             origin,
             currentValues,
-            getSafeDiff(origin, currentValues)
-          )
+            getSafeDiff(origin, currentValues),
+          ),
         );
         if (typeof onSubmit === 'function') {
           onSubmit();
@@ -85,7 +81,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           status: 'error',
           message: e?.responseJSON?.message,
           code: e?.status,
-          changes: getSafeDiff(origin, currentValues)
+          changes: getSafeDiff(origin, currentValues),
         });
       }
     }
@@ -137,7 +133,7 @@ const getSafeDiff = (src: SubmitCorrectAbstractFormValues, curr: SubmitCorrectAb
 const createFeedbackString = (
   original: SubmitCorrectAbstractFormValues,
   current: SubmitCorrectAbstractFormValues,
-  previewText: string
+  previewText: string,
 ): FeedbackRequest => {
   const { name, email, recaptcha, entryType } = current;
   return {
@@ -148,7 +144,7 @@ const createFeedbackString = (
     new: processTree(current),
     name,
     email,
-    diff: entryType === EntryType.Edit ? previewText : ''
+    diff: entryType === EntryType.Edit ? previewText : '',
   };
 };
 

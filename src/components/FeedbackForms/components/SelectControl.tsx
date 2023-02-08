@@ -5,6 +5,7 @@ interface LabelProps {
   children: React.ReactNode;
   required: boolean;
 }
+
 const Label: React.FunctionComponent<LabelProps> = ({
   htmlFor,
   children,
@@ -39,6 +40,7 @@ export interface SelectControlProps {
   required?: boolean;
   children: React.ReactNode;
 }
+
 const SelectControl = React.forwardRef<Ref, SelectControlProps>(
   (props, ref) => {
     const {
@@ -85,7 +87,7 @@ const SelectControl = React.forwardRef<Ref, SelectControlProps>(
         })()}
       </div>
     );
-  }
+  },
 );
 
 export default SelectControl;

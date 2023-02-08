@@ -3,11 +3,7 @@ import FlexView from 'react-flexview';
 import { useFormContext, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
 import { Control, RadioControl } from '../components';
-import {
-  EntryType,
-  entryTypeOptions,
-  SubmitCorrectAbstractFormValues
-} from '../models';
+import { EntryType, entryTypeOptions, SubmitCorrectAbstractFormValues } from '../models';
 import BibcodeLoaderBtn from './BibcodeLoaderBtn';
 import FormPreview from './FormPreview';
 import FormStatus from './FormStatus';
@@ -25,7 +21,7 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const entryType = useWatch<SubmitCorrectAbstractFormValues['entryType']>({
     control,
-    name: 'entryType'
+    name: 'entryType',
   });
 
   return (
@@ -83,15 +79,15 @@ interface INewEditRadiosProps {
 }
 
 const NewEditRadios: React.FC<INewEditRadiosProps> = ({
-                                                        onChange,
-                                                        defaultValue
-                                                      }) => {
+  onChange,
+  defaultValue,
+}) => {
   const [val, setVal] = React.useState(defaultValue);
   const handleChange = React.useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       setVal(e.currentTarget.name);
     },
-    []
+    [],
   );
 
   React.useEffect(() => {
@@ -129,7 +125,7 @@ const NewEditRadios: React.FC<INewEditRadiosProps> = ({
 
 NewEditRadios.defaultProps = {
   onChange: () => null,
-  defaultValue: 'new'
+  defaultValue: 'new',
 };
 
 const RadioTitle = styled.h3`

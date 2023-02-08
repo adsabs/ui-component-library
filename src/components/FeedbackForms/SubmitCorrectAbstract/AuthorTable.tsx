@@ -10,6 +10,7 @@ interface IModifyProps {
   author: Author;
   authors: Author[];
 }
+
 const Modify: React.FC<IModifyProps> = ({ author, onSubmit, authors }) => {
   const initialState = {
     aff: '',
@@ -150,11 +151,13 @@ const OrcidControl = ({
 interface IAddProps {
   onSubmit: (author: Author) => void;
 }
+
 const Add: React.FC<IAddProps> = ({ onSubmit }) => {
   interface AddAuthorType extends Omit<Author, 'name'> {
     firstname: string;
     lastname: string;
   }
+
   const initialState: AddAuthorType = {
     aff: '',
     id: '',
@@ -374,6 +377,7 @@ const AuthorTable: React.FC<IAuthorTableProps> = ({ onChange, authors }) => {
     </>
   );
 };
+
 interface IAuthorTableProps {
   onChange: (...event: any[]) => void;
   authors: Author[];

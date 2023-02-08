@@ -13,7 +13,7 @@ const PreviewBody = React.forwardRef<HTMLDivElement>((_, ref) => {
   // make sure that undefined values get filled by the original
   const currentValues = {
     ...origin,
-    ...getValues()
+    ...getValues(),
   };
   const { name, email, entryType } = currentValues;
 

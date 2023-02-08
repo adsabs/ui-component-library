@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import FlexView from 'react-flexview';
 import styled from 'styled-components';
 import { Control } from '../components';
@@ -42,7 +42,7 @@ const BibcodeList: React.FunctionComponent<{}> = () => {
 
   const getErrorMessage = (
     index: number,
-    field: string
+    field: string,
   ): string | undefined => {
     return errors?.bibcodes?.[index]?.[field]?.message;
   };

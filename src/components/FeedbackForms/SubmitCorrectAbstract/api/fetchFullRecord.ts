@@ -20,7 +20,7 @@ const SKIP_URLS = [
   'http://www.cfa.harvard.edu/sao',
   'https://www.cfa.harvard.edu/',
   'http://www.si.edu',
-  'http://www.nasa.gov'
+  'http://www.nasa.gov',
 ];
 
 /**
@@ -50,8 +50,8 @@ const getUrls = async (identifier: string): Promise<Url[]> => {
                   : e[1].includes('doi')
                     ? 'doi'
                     : 'html',
-              value: e[1]
-            } as Url)
+              value: e[1],
+            } as Url),
         )
           .slice(1)
 
@@ -77,8 +77,8 @@ const fetchFullRecord = _.memoize(
         fl:
           'title,author,aff,pub_raw,pubdate,abstract,volume,bibcode,keyword,orcid_pub',
         q: `identifier:${identifier}`,
-        rows: 1
-      }
+        rows: 1,
+      },
     });
 
     const urls = await getUrls(identifier);
@@ -93,7 +93,7 @@ const fetchFullRecord = _.memoize(
         keyword: keywords = [],
         author = [],
         aff = [],
-        orcid_pub = []
+        orcid_pub = [],
       } = response.response.docs[0];
 
       const authors = author.map((name, position) => ({
@@ -101,7 +101,7 @@ const fetchFullRecord = _.memoize(
         position,
         name,
         aff: aff[position] !== '-' ? aff[position] : '',
-        orcid: orcid_pub[position] !== '-' ? orcid_pub[position] : ''
+        orcid: orcid_pub[position] !== '-' ? orcid_pub[position] : '',
       }));
 
       return {
@@ -113,12 +113,12 @@ const fetchFullRecord = _.memoize(
         authors,
         keywords: keywords.map((k) => ({ value: k })),
         urls,
-        confirmNoAuthor: false
+        confirmNoAuthor: false,
       };
     }
 
     throw new Error('No Result for this bibcode');
-  }
+  },
 );
 
 export default fetchFullRecord;

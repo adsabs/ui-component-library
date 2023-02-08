@@ -33,6 +33,7 @@ const submitFeedback = async (data: FeedbackRequest) => {
 interface IFormPreview {
   onSubmit?: () => void;
 }
+
 const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
   const { getValues, trigger, setError, reset, setValue } = useFormContext<
     AssociatedArticlesFormValues
@@ -80,7 +81,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
         if (diff.includes(sourceBibcode)) {
           setError('sourceBibcode', {
             type: 'validate',
-            message: "Bibcode wasn't found in ADS",
+            message: 'Bibcode wasn\'t found in ADS',
           });
         }
 
@@ -89,7 +90,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
           if (diff.includes(bibcode)) {
             setError(`associated[${i}].bibcode`, {
               type: 'validate',
-              message: "Bibcode wasn't found in ADS",
+              message: 'Bibcode wasn\'t found in ADS',
             });
           }
         });
@@ -164,7 +165,7 @@ type FeedbackRequest = {
 };
 
 const createFeedbackString = (
-  props: AssociatedArticlesFormValues
+  props: AssociatedArticlesFormValues,
 ): FeedbackRequest => {
   const {
     name,

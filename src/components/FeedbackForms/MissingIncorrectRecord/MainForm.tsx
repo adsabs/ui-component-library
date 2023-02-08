@@ -10,6 +10,7 @@ import FormStatus from './FormStatus';
 interface IMainFormProps {
   onSubmit?: () => void;
 }
+
 const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
   const { register, errors } = useFormContext<
     MissingIncorrectRecordFormValues

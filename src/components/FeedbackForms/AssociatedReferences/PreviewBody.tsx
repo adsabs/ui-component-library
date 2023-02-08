@@ -4,7 +4,7 @@ import { AssociatedArticlesFormValues, relationOptions } from '../models';
 
 const getMainRelationString = (
   relation: AssociatedArticlesFormValues['relation'],
-  customRelation: AssociatedArticlesFormValues['customRelation']
+  customRelation: AssociatedArticlesFormValues['customRelation'],
 ) => {
   if (relation === 'other') {
     return customRelation;
@@ -18,7 +18,7 @@ const getMainRelationString = (
 };
 
 const getSecondaryRelationString = (
-  relation: AssociatedArticlesFormValues['relation']
+  relation: AssociatedArticlesFormValues['relation'],
 ) => {
   const match = relationOptions.find((o) => o.key === relation);
   if (match) {
@@ -45,7 +45,7 @@ export const generatePreview = ({
   Correlated articles:
 
   ${relationString}${' '.repeat(
-    Math.abs(23 - relationString.length)
+    Math.abs(23 - relationString.length),
   )}${associationString}
   ${preamble}${associated
     .map(({ bibcode }, idx) => {

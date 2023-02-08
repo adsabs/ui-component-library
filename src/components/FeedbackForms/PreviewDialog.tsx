@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Dialog, DialogType, DialogFooter } from "@fluentui/react/lib/Dialog";
-import { DefaultButton, PrimaryButton } from "@fluentui/react/lib/Button";
-import { mergeStyles, hiddenContentStyle } from "@fluentui/react/lib/Styling";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Dialog, DialogFooter, DialogType } from '@fluentui/react/lib/Dialog';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
+import { hiddenContentStyle, mergeStyles } from '@fluentui/react/lib/Styling';
 
 interface IPreviewDialogProps {
   children?: React.ReactNode;
@@ -13,16 +13,17 @@ interface IPreviewDialogProps {
    * @param {Function} closeDialog - callback to close dialog
    */
   onSubmit?(): void;
+
   disabled?: boolean;
 }
 
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
-const labelId = "preview_label";
+const labelId = 'preview_label';
 
 const PreviewDialog: React.FunctionComponent<IPreviewDialogProps> = ({
   children,
   onSubmit,
-  disabled
+  disabled,
 }) => {
   const [hidden, setHidden] = React.useState(true);
 
@@ -41,8 +42,8 @@ const PreviewDialog: React.FunctionComponent<IPreviewDialogProps> = ({
         hidden={hidden}
         dialogContentProps={{
           type: DialogType.normal,
-          title: "Previewing Submission",
-          closeButtonAriaLabel: "Close"
+          title: 'Previewing Submission',
+          closeButtonAriaLabel: 'Close',
         }}
         modalProps={{
           titleAriaId: labelId,
@@ -50,12 +51,12 @@ const PreviewDialog: React.FunctionComponent<IPreviewDialogProps> = ({
           styles: {
             main: {
               selectors: {
-                ["@media (min-width: 480px)"]: {
-                  minWidth: 450
-                }
-              }
-            }
-          }
+                ['@media (min-width: 480px)']: {
+                  minWidth: 450,
+                },
+              },
+            },
+          },
         }}
       >
         {children}
@@ -63,7 +64,7 @@ const PreviewDialog: React.FunctionComponent<IPreviewDialogProps> = ({
           <PrimaryButton
             text="Submit"
             onClick={() => {
-              if (typeof onSubmit === "function") {
+              if (typeof onSubmit === 'function') {
                 onSubmit();
               }
               setHidden(true);
@@ -78,14 +79,15 @@ const PreviewDialog: React.FunctionComponent<IPreviewDialogProps> = ({
 
 PreviewDialog.defaultProps = {
   children: null,
-  onSubmit: () => {},
-  disabled: false
+  onSubmit: () => {
+  },
+  disabled: false,
 };
 
 PreviewDialog.propTypes = {
   children: PropTypes.element,
   onSubmit: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 export default PreviewDialog;
