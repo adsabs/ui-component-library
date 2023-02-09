@@ -15,9 +15,21 @@ const DiffView: React.FC<IDiffViewProps> = React.memo(
 
     const sections = Object.keys(leftObj).map((key) => {
       const isArray = Array.isArray(leftObj[key]);
-      const changes = isArray
-        ? diffArrays(leftObj[key], rightObj[key])
-        : diffWords(leftObj[key], rightObj[key]);
+      if (isArray && leftObj[key].length === 0) {
+        return null;
+      }
+      let changes: (ArrayChange<string> | Change)[] = [];
+
+      try {
+        if (isArray) {
+          changes = diffArrays(leftObj[key], rightObj[key]);
+        } else if (typeof leftObj[key] === 'string') {
+          changes = diffWords(leftObj[key], rightObj[key]);
+        }
+
+      } catch (e) {
+        return null;
+      }
 
       if (
         changes.length === 1 &&
@@ -76,8 +88,8 @@ const TextChanges = ({ keyProp, changes, right }: ITextChangeElementProps) => {
         }
         return [...list, <Text inline>{change.value}</Text>];
       }, [])}
-      <br />
-      <br />
+      <br/>
+      <br/>
       <Bold>Updated:</Bold>
       <pre>{right[keyProp]}</pre>
     </>
@@ -130,20 +142,20 @@ const Add = styled.p`
   color: green;
   margin: 0;
   display: ${(props: { inline?: boolean }) =>
-  props.inline ? 'inline' : 'block'};
+    props.inline ? 'inline' : 'block'};
 `;
 
 const Remove = styled.p`
   color: red;
   margin: 0;
   display: ${(props: { inline?: boolean }) =>
-  props.inline ? 'inline' : 'block'};
+    props.inline ? 'inline' : 'block'};
 `;
 
 const Text = styled.p`
   margin: 0;
   display: ${(props: { inline?: boolean }) =>
-  props.inline ? 'inline' : 'block'};
+    props.inline ? 'inline' : 'block'};
 `;
 
 const SectionTitle = styled.div`
@@ -168,30 +180,33 @@ export interface ProcessedFormValues {
   urls: string[];
   references: string[];
   comments: string;
+  publication: string;
+  publicationDate: string;
+  title: string;
+  abstract: string;
 }
 
 export const processTree = (
   obj: SubmitCorrectAbstractFormValues,
 ): ProcessedFormValues => {
   const {
-    name,
-    email, // skip
     comments = '',
-    entryType,
     authors = [],
     collection = [],
     urls = [],
     keywords = [],
     references = [],
-    recaptcha, // skip
-    ...props
+    publication = '',
+    publicationDate = '',
+    title = '',
+    abstract = ''
   } = obj;
 
   return {
-    ...props,
     comments,
+    publication, publicationDate, title, abstract,
     keywords: keywords.map(({ value }) => value),
-    authors: authors.map(({ name }) => name),
+    authors: authors.map((author) => author.name),
     affiliation: authors.map(({ aff }) => aff),
     orcid: authors.map(({ orcid }) => orcid),
     collection: collection.filter((c) => c).map((c) => c),
@@ -307,9 +322,19 @@ export function createDiffString(
     if (isArray && leftObj[key].length === 0) {
       return null;
     }
-    const changes = isArray
-      ? diffArrays(leftObj[key], rightObj[key])
-      : diffWords(leftObj[key], rightObj[key]);
+
+    let changes: (ArrayChange<string> | Change)[] = [];
+
+    try {
+      if (Array.isArray(leftObj[key])) {
+        changes = diffArrays(leftObj[key], rightObj[key]);
+      } else if (typeof leftObj[key] === 'string') {
+        changes = diffWords(leftObj[key], rightObj[key]);
+      }
+
+    } catch (e) {
+      return null;
+    }
 
     if (
       changes.length === 1 &&

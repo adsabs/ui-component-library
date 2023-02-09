@@ -39,11 +39,11 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
           errorMessage={errors.email ? errors.email.message : undefined}
           required
         />
-        <BibcodeList />
+        <BibcodeList/>
       </FlexView>
-      <hr className="hr" />
-      <FormPreview onSubmit={onSubmit} />
-      <FormStatus />
+      <hr className="hr"/>
+      <FormPreview onSubmit={onSubmit}/>
+      <FormStatus/>
     </React.Fragment>
   );
 };

@@ -12,6 +12,7 @@ interface IControlRow {
 const ControlRow = styled.div<IControlRow>`
   display: flex;
   justify-content: flex-start;
+
   & > * {
     flex-basis: ${({ count }) => `${(1 / count) * 100}%`};
   }
@@ -108,7 +109,7 @@ const ReferencesList: React.FC = () => {
                     className="btn btn-danger"
                     onClick={() => handleRemove(index)}
                   >
-                    <i className="fa fa-trash" aria-hidden="true" />
+                    <i className="fa fa-trash" aria-hidden="true"/>
                     <span className="sr-only">Remove</span>
                   </button>
                 }
@@ -129,7 +130,7 @@ const ReferencesList: React.FC = () => {
           </p>
         ) : (
           <button type="button" className="btn btn-default" onClick={handleAdd}>
-            <i className="fa fa-plus" aria-hidden="true" /> Add new reference
+            <i className="fa fa-plus" aria-hidden="true"/> Add new reference
           </button>
         )}
       </FlexView>

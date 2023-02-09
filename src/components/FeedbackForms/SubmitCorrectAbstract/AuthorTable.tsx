@@ -46,7 +46,7 @@ const Modify: React.FC<IModifyProps> = ({ author, onSubmit, authors }) => {
     <ModalButton
       buttonText={
         <>
-          <i className="fa fa-pencil" aria-hidden /> Modify
+          <i className="fa fa-pencil" aria-hidden/> Modify
         </>
       }
       buttonStyle="default"
@@ -70,7 +70,7 @@ const Modify: React.FC<IModifyProps> = ({ author, onSubmit, authors }) => {
         onChange={handleChange}
         defaultValue={author.aff}
       />
-      <OrcidControl onChange={handleChange} defaultValue={author.orcid} />
+      <OrcidControl onChange={handleChange} defaultValue={author.orcid}/>
       <div className="form-group">
         <label htmlFor="feedback_author_position_spinner">Position</label>
         <input
@@ -129,7 +129,7 @@ const OrcidControl = ({
         aria-checked={showOrcid}
         onClick={handleToggleOrcid}
       >
-        <i aria-hidden="true" className={faCls} /> {buttonText}
+        <i aria-hidden="true" className={faCls}/> {buttonText}
       </button>
       {showOrcid && (
         <input
@@ -200,7 +200,7 @@ const Add: React.FC<IAddProps> = ({ onSubmit }) => {
     <ModalButton
       buttonText={
         <>
-          <i className="fa fa-plus" aria-hidden /> Add new author
+          <i className="fa fa-plus" aria-hidden/> Add new author
         </>
       }
       buttonStyle="default"
@@ -346,13 +346,13 @@ const AuthorTable: React.FC<IAuthorTableProps> = ({ onChange, authors }) => {
     <>
       {authors.length <= 0 ? (
         <div className="form-group">
-          <Add onSubmit={handleAddSubmit} />
+          <Add onSubmit={handleAddSubmit}/>
         </div>
       ) : (
         <DataTable
           columns={columns}
           data={authors}
-          actions={<Add onSubmit={handleAddSubmit} />}
+          actions={<Add onSubmit={handleAddSubmit}/>}
           customStyles={{
             header: {
               style: {
@@ -398,7 +398,7 @@ const Wrapper = () => {
     setValue('authors', modifiedAuthors, { shouldDirty: true });
   };
 
-  return <AuthorTable onChange={handleChange} authors={authors || []} />;
+  return <AuthorTable onChange={handleChange} authors={authors || []}/>;
 };
 
 export default Wrapper;

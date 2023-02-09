@@ -31,14 +31,14 @@ const RadioControl = React.forwardRef<Ref, RadioControlProps>((props, ref) => {
       {inline
         ? options.map(({ label: optionLabel, key: value }) => (
           <label className="radio-inline custom-radio" key={value}>
-            <input type="radio" name={field} value={value} ref={ref} />
+            <input type="radio" name={field} value={value} ref={ref}/>
             {optionLabel}
           </label>
         ))
         : options.map(({ label: optionLabel, key: value }) => (
           <div className="radio" key={value}>
             <label className="custom-radio">
-              <input type="radio" name={field} value={value} ref={ref} />
+              <input type="radio" name={field} value={value} ref={ref}/>
               {optionLabel}
             </label>
           </div>

@@ -52,6 +52,7 @@ export const apiFetch = (props: IApiFetchProps) => {
 
     request.set('options', {
       done: (...args: any[]) => {
+        // @ts-ignore
         resolve(...args);
       },
       fail: (...args: any[]) => {

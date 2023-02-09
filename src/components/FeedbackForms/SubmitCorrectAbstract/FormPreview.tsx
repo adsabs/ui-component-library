@@ -115,7 +115,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           setShow(false);
         }}
       >
-        <PreviewBody ref={previewRef} />
+        <PreviewBody ref={previewRef}/>
       </PreviewModal>
     </>
   );

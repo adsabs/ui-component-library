@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 class FormErrorBoundary extends React.Component<{ msg?: ReactNode }> {
@@ -8,10 +8,6 @@ class FormErrorBoundary extends React.Component<{ msg?: ReactNode }> {
 
   public static getDerivedStateFromError() {
     return { hasError: true };
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // console.error('[error]: ', error, errorInfo);
   }
 
   public render() {

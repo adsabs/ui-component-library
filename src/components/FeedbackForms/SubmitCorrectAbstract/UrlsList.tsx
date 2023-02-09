@@ -8,6 +8,7 @@ import { Control, SelectControl } from '../components';
 const ControlRow = styled.div`
   display: flex;
   justify-content: flex-start;
+
   & > * {
     flex-basis: 50%;
   }
@@ -96,7 +97,7 @@ const UrlsList: React.FC = () => {
                   className="btn btn-danger"
                   onClick={() => handleRemove(index)}
                 >
-                  <i className="fa fa-trash" aria-hidden="true" />
+                  <i className="fa fa-trash" aria-hidden="true"/>
                   <span className="sr-only">Remove</span>
                 </button>
               }
@@ -107,7 +108,7 @@ const UrlsList: React.FC = () => {
       })}
       <FlexView hAlignContent="left">
         <button type="button" className="btn btn-default" onClick={handleAdd}>
-          <i className="fa fa-plus" aria-hidden="true" /> Add new URL
+          <i className="fa fa-plus" aria-hidden="true"/> Add new URL
         </button>
       </FlexView>
     </ControlContainer>

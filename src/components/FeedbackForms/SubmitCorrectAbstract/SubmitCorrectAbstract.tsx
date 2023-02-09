@@ -11,7 +11,7 @@ import { Collection, EntryType, ReduxState, SubmitCorrectAbstractFormValues } fr
 import MainForm from './MainForm';
 
 const Heading = styled.h2`
-  margintop: 0;
+  margin-top: 0;
 `;
 
 const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.object(
@@ -60,7 +60,7 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
     confirmNoAuthor: Yup.boolean().test(
       'confirmNoAuthor',
       'Please confirm, this abstract has no author(s)',
-      function(value) {
+      function (value) {
         const hasAuthors = this?.parent?.authors?.length > 0;
         return (value && !hasAuthors) || (!value && hasAuthors);
       },
@@ -186,7 +186,7 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
           <FormSubmissionCtx.Provider value={submissionValue}>
             <OriginCtx.Provider value={value}>
               <form>
-                <MainForm />
+                <MainForm/>
               </form>
             </OriginCtx.Provider>
           </FormSubmissionCtx.Provider>

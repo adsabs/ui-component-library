@@ -36,7 +36,7 @@ New Record:
           <p>Summary of corrections/updates:</p>
           <FormErrorBoundary msg={<>Unable to load preview. You can still submit.</>}>
             <ScrollView>
-              <DiffView left={origin} right={currentValues} />
+              <DiffView left={origin} right={currentValues}/>
             </ScrollView>
           </FormErrorBoundary>
         </>

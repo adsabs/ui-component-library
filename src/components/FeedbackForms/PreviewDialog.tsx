@@ -6,15 +6,12 @@ import { hiddenContentStyle, mergeStyles } from '@fluentui/react/lib/Styling';
 
 interface IPreviewDialogProps {
   children?: React.ReactNode;
+  disabled?: boolean;
 
   /**
    * Fired when the submit button is pressed
-   *
-   * @param {Function} closeDialog - callback to close dialog
    */
   onSubmit?(): void;
-
-  disabled?: boolean;
 }
 
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
@@ -70,18 +67,11 @@ const PreviewDialog: React.FunctionComponent<IPreviewDialogProps> = ({
               setHidden(true);
             }}
           />
-          <DefaultButton text="Cancel" onClick={() => setHidden(true)} />
+          <DefaultButton text="Cancel" onClick={() => setHidden(true)}/>
         </DialogFooter>
       </Dialog>
     </React.Fragment>
   );
-};
-
-PreviewDialog.defaultProps = {
-  children: null,
-  onSubmit: () => {
-  },
-  disabled: false,
 };
 
 PreviewDialog.propTypes = {

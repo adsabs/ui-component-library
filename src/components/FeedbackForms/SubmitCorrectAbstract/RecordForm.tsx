@@ -37,8 +37,8 @@ const RecordForm: React.FC<IRecordFormProps> = () => {
         errorMessage={errors.title ? errors.title.message : undefined}
       />
       <Label>Authors</Label>
-      <AuthorTable />
-      <ConfirmNoAuthorCheckbox />
+      <AuthorTable/>
+      <ConfirmNoAuthorCheckbox/>
       <Control
         type="text"
         field="publication"
@@ -66,7 +66,7 @@ const RecordForm: React.FC<IRecordFormProps> = () => {
       />
       <Label>Urls</Label>
       <div className="well">
-        <UrlsList />
+        <UrlsList/>
       </div>
       <div className="form-group">
         <label htmlFor="feedback-abstract-textarea">Abstract</label>
@@ -80,11 +80,11 @@ const RecordForm: React.FC<IRecordFormProps> = () => {
       </div>
       <Label>Keywords</Label>
       <div className="well">
-        <KeywordsList />
+        <KeywordsList/>
       </div>
       <Label>References</Label>
       <div className="well">
-        <ReferencesList />
+        <ReferencesList/>
       </div>
       <div className="form-group">
         <label htmlFor="feedback-comments-textarea">User Comments</label>

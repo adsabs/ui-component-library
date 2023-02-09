@@ -78,7 +78,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
                     onClick={() => handleRemove(index)}
                     disabled={fields.length <= 1}
                   >
-                    <i className="fa fa-trash" aria-hidden="true" />
+                    <i className="fa fa-trash" aria-hidden="true"/>
                     <span className="sr-only">Remove</span>
                   </button>
                 }
@@ -95,7 +95,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
             onClick={handleAdd}
             disabled={fields.length > 10}
           >
-            <i className="fa fa-plus" aria-hidden="true" /> Add new row
+            <i className="fa fa-plus" aria-hidden="true"/> Add new row
           </button>
         )}
       </FlexView>
