@@ -102,7 +102,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
         onSubmit();
       }
     } catch (e) {
-      console.error(e);
+      // TODO: handle submission error that bubbles to here
     }
   };
 
@@ -116,7 +116,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
           disabled={isPending}
         >
           {isPending ? (
-            <i className="fa fa-spinner fa-spin" aria-hidden />
+            <i className="fa fa-spinner fa-spin" aria-hidden/>
           ) : (
             'Preview'
           )}
@@ -146,7 +146,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
             setShow(false);
           }}
         >
-          <PreviewBody />
+          <PreviewBody/>
         </PreviewModal>
       </IfFulfilled>
     </>

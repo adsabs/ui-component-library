@@ -22,12 +22,9 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
     customRelation: Yup.string().test(
       'customRelationRequired',
       'Must set a custom relation',
-      function(value) {
+      function (value) {
         const isOther = this.parent.relation === 'other';
-        if (isOther && value === '') {
-          return false;
-        }
-        return true;
+        return !(isOther && value === '');
       },
     ),
     sourceBibcode: Yup.string()
@@ -69,9 +66,7 @@ const AssociatedReferences: React.FunctionComponent = () => {
     },
   });
 
-  const onSubmit = methods.handleSubmit((data) => {
-    console.log('done', data);
-  });
+  const onSubmit = methods.handleSubmit(() => undefined);
 
   return (
     <FormErrorBoundary>
@@ -105,7 +100,7 @@ const AssociatedReferences: React.FunctionComponent = () => {
         </FlexView>
         <FormProvider {...(methods as any)}>
           <form>
-            <MainForm onSubmit={onSubmit} />
+            <MainForm onSubmit={onSubmit}/>
           </form>
         </FormProvider>
       </FlexView>
@@ -114,7 +109,7 @@ const AssociatedReferences: React.FunctionComponent = () => {
 };
 
 const Heading = styled.h2`
-  margintop: 0;
+  margin-top: 0;
 `;
 
 const Bold = styled.span`

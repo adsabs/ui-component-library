@@ -1,12 +1,12 @@
-import React, {FC, useEffect} from 'react';
-import {FormGroup} from 'react-bootstrap';
-import {useFormContext, useWatch} from 'react-hook-form';
+import React, { FC, useEffect } from 'react';
+import { FormGroup } from 'react-bootstrap';
+import { useFormContext, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
-import {SubmitCorrectAbstractFormValues} from '../models';
+import { SubmitCorrectAbstractFormValues } from '../models';
 
 
 export const ConfirmNoAuthorCheckbox: FC = () => {
-  const {control, register, setValue, unregister, errors} = useFormContext();
+  const { control, register, setValue, unregister, errors } = useFormContext();
 
   const authors = useWatch<SubmitCorrectAbstractFormValues['authors']>({
     control,
@@ -22,7 +22,7 @@ export const ConfirmNoAuthorCheckbox: FC = () => {
   });
 
   useEffect(() => {
-    register({name: 'confirmNoAuthor'});
+    register({ name: 'confirmNoAuthor' });
     return () => unregister('confirmNoAuthor');
   }, [register]);
 

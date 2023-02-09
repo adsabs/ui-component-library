@@ -38,7 +38,7 @@ const PreviewModal: React.FunctionComponent<IPreviewModalProps> = ({
             Cancel
           </button>
         </div>
-        <Recaptcha />
+        <Recaptcha/>
       </Modal.Footer>
     </Modal>
   );

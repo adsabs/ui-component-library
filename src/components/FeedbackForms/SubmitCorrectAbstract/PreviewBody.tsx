@@ -1,21 +1,21 @@
 import React from 'react';
-import {useFormContext} from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
-import {EntryType, SubmitCorrectAbstractFormValues} from '../models';
-import DiffView, {processTree} from './DiffView';
-import {OriginCtx} from './SubmitCorrectAbstract';
-import {FormErrorBoundary} from '../components';
+import { EntryType, SubmitCorrectAbstractFormValues } from '../models';
+import DiffView, { processTree } from './DiffView';
+import { OriginCtx } from './SubmitCorrectAbstract';
+import { FormErrorBoundary } from '../components';
 
 const PreviewBody = React.forwardRef<HTMLDivElement>((_, ref) => {
-  const {getValues} = useFormContext<SubmitCorrectAbstractFormValues>();
-  const {origin} = React.useContext(OriginCtx);
+  const { getValues } = useFormContext<SubmitCorrectAbstractFormValues>();
+  const { origin } = React.useContext(OriginCtx);
 
   // make sure that undefined values get filled by the original
   const currentValues = {
     ...origin,
     ...getValues(),
   };
-  const {name, email, entryType} = currentValues;
+  const { name, email, entryType } = currentValues;
 
   return (
     <div ref={ref}>

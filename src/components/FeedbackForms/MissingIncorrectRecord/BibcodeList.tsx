@@ -8,6 +8,7 @@ import { MissingIncorrectRecordFormValues } from '../models';
 const ControlRow = styled.div`
   display: flex;
   justify-content: flex-start;
+
   & > * {
     flex-basis: 50%;
   }
@@ -69,7 +70,7 @@ const BibcodeList: React.FunctionComponent<{}> = () => {
                     onClick={() => handleCopy(index)}
                     title="Copy primary citing bibcode"
                   >
-                    <i className="fa fa-copy" aria-hidden="true" />
+                    <i className="fa fa-copy" aria-hidden="true"/>
                     <span className="sr-only">Copy primary citing bibcode</span>
                   </button>
                 ) : null
@@ -90,7 +91,7 @@ const BibcodeList: React.FunctionComponent<{}> = () => {
                   className="btn btn-danger"
                   onClick={() => handleRemove(index)}
                 >
-                  <i className="fa fa-trash" aria-hidden="true" />
+                  <i className="fa fa-trash" aria-hidden="true"/>
                   <span className="sr-only">Remove</span>
                 </button>
               }
@@ -101,7 +102,7 @@ const BibcodeList: React.FunctionComponent<{}> = () => {
       })}
       <FlexView hAlignContent="left">
         <button type="button" className="btn btn-default" onClick={handleAdd}>
-          <i className="fa fa-plus" aria-hidden="true" /> Add new row
+          <i className="fa fa-plus" aria-hidden="true"/> Add new row
         </button>
       </FlexView>
     </React.Fragment>

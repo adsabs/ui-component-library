@@ -1,13 +1,13 @@
-import {yupResolver} from '@hookform/resolvers';
+import { yupResolver } from '@hookform/resolvers';
 import moment from 'moment';
 import React from 'react';
 import FlexView from 'react-flexview';
-import {FormProvider, useForm} from 'react-hook-form';
-import {useSelector} from 'react-redux';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as Yup from 'yup';
-import {FormErrorBoundary} from '../components';
-import {Collection, EntryType, ReduxState, SubmitCorrectAbstractFormValues} from '../models';
+import { FormErrorBoundary } from '../components';
+import { Collection, EntryType, ReduxState, SubmitCorrectAbstractFormValues } from '../models';
 import MainForm from './MainForm';
 
 const Heading = styled.h2`
@@ -53,8 +53,8 @@ const validationSchema: Yup.ObjectSchema<SubmitCorrectAbstractFormValues> = Yup.
       }),
     ),
     abstract: Yup.string(),
-    keywords: Yup.array(Yup.object().shape({value: Yup.string()})),
-    references: Yup.array(Yup.object().shape({value: Yup.string()})),
+    keywords: Yup.array(Yup.object().shape({ value: Yup.string() })),
+    references: Yup.array(Yup.object().shape({ value: Yup.string() })),
     comments: Yup.string().ensure(),
     recaptcha: Yup.string().ensure(),
     confirmNoAuthor: Yup.boolean().test(
@@ -78,10 +78,10 @@ export const defaultValues: SubmitCorrectAbstractFormValues = {
   authors: [],
   publication: '',
   publicationDate: '',
-  urls: [{value: ''}],
+  urls: [{ value: '' }],
   abstract: '',
-  keywords: [{value: ''}],
-  references: [{value: ''}],
+  keywords: [{ value: '' }],
+  references: [{ value: '' }],
   comments: '',
   recaptcha: '',
   confirmNoAuthor: false,
@@ -113,8 +113,8 @@ export const FormSubmissionCtx = React.createContext<IFormSubmissionCtx>({
   setSubmissionState: () => null,
 });
 
-const emailSelector = ({user: {email}}: ReduxState) => email;
-const bibcodeSelector = ({main: {bibcode}}: ReduxState) => bibcode;
+const emailSelector = ({ user: { email } }: ReduxState) => email;
+const bibcodeSelector = ({ main: { bibcode } }: ReduxState) => bibcode;
 const SubmitCorrectAbstract: React.FunctionComponent = () => {
   const email = useSelector<
     ReduxState,
@@ -143,13 +143,13 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
   const [origin, setOrigin] = React.useState<SubmitCorrectAbstractFormValues>(
     initialValues,
   );
-  const value = React.useMemo(() => ({origin, setOrigin}), [origin]);
+  const value = React.useMemo(() => ({ origin, setOrigin }), [origin]);
 
   const [submissionState, setSubmissionState] = React.useState<SubmissionState>(
     null,
   );
   const submissionValue = React.useMemo(
-    () => ({submissionState, setSubmissionState}),
+    () => ({ submissionState, setSubmissionState }),
     [submissionState],
   );
 

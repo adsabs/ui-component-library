@@ -1,4 +1,4 @@
-import {PubSubEvent} from '../../hooks';
+import { PubSubEvent } from '../../hooks';
 
 type BumblebeeApp = any;
 declare var bbb: BumblebeeApp;
@@ -39,12 +39,12 @@ interface IApiFetchProps {
 }
 
 export const apiFetch = (props: IApiFetchProps) => {
-  const {options, target, query} = props;
+  const { options, target, query } = props;
 
   const bumblebeeGlobal = bbb ? bbb : null;
   return new Promise<JSONResponse>((resolve, reject) => {
     const ps = bumblebeeGlobal.__beehive.getService('PubSub');
-    const {makeApiQuery, makeApiRequest} = bumblebeeGlobal.getObject('Utils');
+    const { makeApiQuery, makeApiRequest } = bumblebeeGlobal.getObject('Utils');
     const request = makeApiRequest({
       target,
       query: makeApiQuery(query),

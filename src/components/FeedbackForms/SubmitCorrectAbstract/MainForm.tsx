@@ -26,7 +26,7 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
 
   return (
     <React.Fragment>
-      <FormStatus />
+      <FormStatus/>
       <FlexView column>
         <Control
           type="text"
@@ -61,13 +61,13 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
           onLoading={() => setIsLoaded(false)}
         />
       </FlexView>
-      {entryType === EntryType.Edit && !isLoaded ? null : <RecordForm />}
-      <hr className="hr" />
+      {entryType === EntryType.Edit && !isLoaded ? null : <RecordForm/>}
+      <hr className="hr"/>
       <FormPreview
         onSubmit={onSubmit}
         disabled={entryType === EntryType.Edit && !isLoaded}
       />
-      <FormStatus />
+      <FormStatus/>
     </React.Fragment>
   );
 };

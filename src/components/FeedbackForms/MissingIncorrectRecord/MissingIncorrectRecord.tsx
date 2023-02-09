@@ -34,7 +34,7 @@ const validationSchema: Yup.ObjectSchema<MissingIncorrectRecordFormValues> = Yup
             .test(
               'citing and cited not equal',
               'Bibcode is same as citing',
-              function() {
+              function () {
                 return this.parent.citing !== this.parent.cited;
               },
             ),
@@ -61,9 +61,7 @@ const MissingIncorrectRecord: React.FunctionComponent = () => {
     },
   });
 
-  const onSubmit = methods.handleSubmit((data) => {
-    console.log('done', data);
-  });
+  const onSubmit = methods.handleSubmit(() => undefined);
 
   return (
     <FormErrorBoundary>
@@ -88,7 +86,7 @@ const MissingIncorrectRecord: React.FunctionComponent = () => {
         </FlexView>
         <FormProvider {...(methods as any)}>
           <form>
-            <MainForm onSubmit={onSubmit} />
+            <MainForm onSubmit={onSubmit}/>
           </form>
         </FormProvider>
       </FlexView>
@@ -97,7 +95,7 @@ const MissingIncorrectRecord: React.FunctionComponent = () => {
 };
 
 const Heading = styled.h2`
-  margintop: 0;
+  margin-top: 0;
 `;
 
 export default MissingIncorrectRecord;

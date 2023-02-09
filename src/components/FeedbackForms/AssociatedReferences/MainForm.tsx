@@ -57,11 +57,11 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
             )),
           ]}
         </SelectControl>
-        <RelationField />
+        <RelationField/>
       </FlexView>
-      <hr className="hr" />
-      <FormPreview onSubmit={onSubmit} />
-      <FormStatus />
+      <hr className="hr"/>
+      <FormPreview onSubmit={onSubmit}/>
+      <FormStatus/>
     </React.Fragment>
   );
 };
@@ -96,7 +96,7 @@ const RelationField: React.FunctionComponent = () => {
               }
             />
           )}
-          <BibcodeList label={label} secondaryLabel={secondaryLabel} />
+          <BibcodeList label={label} secondaryLabel={secondaryLabel}/>
         </>
       );
     }

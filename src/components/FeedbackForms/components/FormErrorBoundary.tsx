@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 class FormErrorBoundary extends React.Component<{ msg?: ReactNode }> {
@@ -7,7 +7,7 @@ class FormErrorBoundary extends React.Component<{ msg?: ReactNode }> {
   };
 
   public static getDerivedStateFromError() {
-    return {hasError: true};
+    return { hasError: true };
   }
 
   public render() {

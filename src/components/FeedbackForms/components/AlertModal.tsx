@@ -65,9 +65,9 @@ const getTitle = (type: AlertType) => {
 const getIcon = (type: AlertType) => {
   switch (type) {
     case AlertType.SUCCESS:
-      return <i className="fa fa-check fa-2x text-success" aria-hidden />;
+      return <i className="fa fa-check fa-2x text-success" aria-hidden/>;
     case AlertType.LOADING:
-      return <i className="fa fa-spinner fa-spin fa-2x" aria-hidden />;
+      return <i className="fa fa-spinner fa-spin fa-2x" aria-hidden/>;
     case AlertType.ERROR:
       return (
         <i
@@ -76,7 +76,7 @@ const getIcon = (type: AlertType) => {
         />
       );
     default:
-      return <i className="fa fa-exclamation-triangle fa-2x" aria-hidden />;
+      return <i className="fa fa-exclamation-triangle fa-2x" aria-hidden/>;
   }
 };
 

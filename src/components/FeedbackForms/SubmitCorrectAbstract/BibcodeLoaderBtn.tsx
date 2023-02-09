@@ -95,10 +95,10 @@ const BibcodeLoaderBtn: React.FC<IBibcodeLoadedBtnProps> = ({
           disabled={isLoading}
         >
           {isLoading ? (
-            <i className="fa fa-spin fa-spinner" aria-hidden />
+            <i className="fa fa-spin fa-spinner" aria-hidden/>
           ) : (
             <>
-              <i className="fa fa-folder-open-o" aria-hidden /> Load Record
+              <i className="fa fa-folder-open-o" aria-hidden/> Load Record
             </>
           )}
         </button>

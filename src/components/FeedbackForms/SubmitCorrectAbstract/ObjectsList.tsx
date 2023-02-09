@@ -11,6 +11,7 @@ interface IControlRow {
 
 const ControlRow = styled.div<IControlRow>`
   display: flex;
+
   & > * {
     flex-basis: ${({ count }) => `${(1 / count) * 100}%`};
   }
@@ -74,7 +75,7 @@ const KeywordsList: React.FC = () => {
                   className="btn btn-danger"
                   onClick={() => handleRemove(index)}
                 >
-                  <i className="fa fa-trash" aria-hidden="true" />
+                  <i className="fa fa-trash" aria-hidden="true"/>
                   <span className="sr-only">Remove</span>
                 </button>
               }
@@ -85,7 +86,7 @@ const KeywordsList: React.FC = () => {
       })}
       <FlexView hAlignContent="left">
         <button type="button" className="btn btn-default" onClick={handleAdd}>
-          <i className="fa fa-plus" aria-hidden="true" /> Add new object
+          <i className="fa fa-plus" aria-hidden="true"/> Add new object
         </button>
       </FlexView>
     </ControlContainer>
