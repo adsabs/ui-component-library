@@ -1,7 +1,7 @@
-import { ArrayChange, Change, diffArrays, diffWords } from 'diff';
+import {ArrayChange, Change, diffArrays, diffWords} from 'diff';
 import React from 'react';
 import styled from 'styled-components';
-import { SubmitCorrectAbstractFormValues } from '../models';
+import {SubmitCorrectAbstractFormValues} from '../models';
 
 interface IDiffViewProps {
   left: SubmitCorrectAbstractFormValues;
@@ -9,7 +9,7 @@ interface IDiffViewProps {
 }
 
 const DiffView: React.FC<IDiffViewProps> = React.memo(
-  ({ left, right }) => {
+  ({left, right}) => {
     const leftObj = processTree(left);
     const rightObj = processTree(right);
 
@@ -76,7 +76,7 @@ interface ITextChangeElementProps {
   right: ProcessedFormValues;
 }
 
-const TextChanges = ({ keyProp, changes, right }: ITextChangeElementProps) => {
+const TextChanges = ({keyProp, changes, right}: ITextChangeElementProps) => {
   return (
     <>
       <Bold>Diff:</Bold>
@@ -101,7 +101,7 @@ interface IArrayChangeElementProps {
   changes: ArrayChange<string>[];
 }
 
-const ArrayChanges = ({ keyProp, changes }: IArrayChangeElementProps) => {
+const ArrayChanges = ({keyProp, changes}: IArrayChangeElementProps) => {
   let i = 0;
   return (
     <>
@@ -162,7 +162,7 @@ const SectionTitle = styled.div`
   text-transform: capitalize;
 `;
 
-const Section: React.FC<{ title: string }> = ({ title, children }) => {
+const Section: React.FC<{ title: string }> = ({title, children}) => {
   return (
     <div className="panel panel-info">
       <SectionTitle className="panel-heading">{title}</SectionTitle>
@@ -184,6 +184,7 @@ export interface ProcessedFormValues {
   publicationDate: string;
   title: string;
   abstract: string;
+  bibcode: string;
 }
 
 export const processTree = (
@@ -199,22 +200,27 @@ export const processTree = (
     publication = '',
     publicationDate = '',
     title = '',
-    abstract = ''
+    abstract = '',
+    bibcode = '',
   } = obj;
 
   return {
+    bibcode,
     comments,
-    publication, publicationDate, title, abstract,
-    keywords: keywords.map(({ value }) => value),
+    publication,
+    publicationDate,
+    title,
+    abstract,
+    keywords: keywords.map(({value}) => value),
     authors: authors.map((author) => author.name),
-    affiliation: authors.map(({ aff }) => aff),
-    orcid: authors.map(({ orcid }) => orcid),
+    affiliation: authors.map(({aff}) => aff),
+    orcid: authors.map(({orcid}) => orcid),
     collection: collection.filter((c) => c).map((c) => c),
     urls: urls
-      .filter(({ value, type }) => type && value.length > 0)
+      .filter(({value, type}) => type && value.length > 0)
       .map((u) => `${u.type ? `(${u.type}) ` : ''}${u.value}`),
     references: references
-      .filter(({ value }) => value.length > 0)
+      .filter(({value}) => value.length > 0)
       .map((r) => `${r.type ? `(${r.type}) ` : ''}${r.value}`),
   };
 };
@@ -235,7 +241,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
   const entries = changes.reduce((acc, change) => {
     return [
       ...acc,
-      ...change.value.map((v) => ({ count: 1, ...change, value: v })),
+      ...change.value.map((v) => ({count: 1, ...change, value: v})),
     ];
   }, []);
 
@@ -263,7 +269,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
       // actual change made, this should show up as text striked through
 
       out.push(`${index} ${strikeText(entries[i].value)}${entries[j].value}`);
-      entries[j] = { value: entries[j].value, count: entries[j].count };
+      entries[j] = {value: entries[j].value, count: entries[j].count};
       index += 1;
     } else if (entries[i].removed) {
       // entry fully removed from the list, strike through full string including index
