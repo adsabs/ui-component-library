@@ -40,7 +40,7 @@ export const relationOptions: RelationOption[] = [
     label: 'arXiv',
     secondaryLabel: 'Main Paper',
   },
-  { key: 'other', text: 'Other', label: '', secondaryLabel: 'Related' },
+  {key: 'other', text: 'Other', label: '', secondaryLabel: 'Related'},
 ];
 
 export type UrlOption = {
@@ -49,11 +49,11 @@ export type UrlOption = {
 };
 
 export const urlOptions: UrlOption[] = [
-  { key: 'arxiv', text: 'arXiv' },
-  { key: 'pdf', text: 'PDF' },
-  { key: 'doi', text: 'DOI' },
-  { key: 'html', text: 'HTML' },
-  { key: 'other', text: 'OTHER' },
+  {key: 'arxiv', text: 'arXiv'},
+  {key: 'pdf', text: 'PDF'},
+  {key: 'doi', text: 'DOI'},
+  {key: 'html', text: 'HTML'},
+  {key: 'other', text: 'OTHER'},
 ];
 
 export type ReferenceOption = {
@@ -62,13 +62,10 @@ export type ReferenceOption = {
 };
 
 export const referenceOptions: ReferenceOption[] = [
-  { key: 'bibcode', text: 'Bibcode' },
-  { key: 'reference', text: 'Reference' },
+  {key: 'bibcode', text: 'Bibcode'},
+  {key: 'reference', text: 'Reference'},
 ];
 
-type AssociatedBibcode = {
-  bibcode: string;
-};
 
 export type AssociatedArticlesFormValues = {
   name: string;
@@ -76,7 +73,7 @@ export type AssociatedArticlesFormValues = {
   relation: 'none' | 'errata' | 'addenda' | 'series' | 'arxiv' | 'other';
   customRelation: string;
   sourceBibcode: string;
-  associated: AssociatedBibcode[];
+  associated: { bibcode: string }[];
   recaptcha: string;
 };
 
@@ -129,9 +126,9 @@ export enum Collection {
 }
 
 export const collectionOptions: { key: Collection; label: string }[] = [
-  { key: Collection.Astronomy, label: 'Astronomy and Astrophysics' },
-  { key: Collection.Physics, label: 'Physics and Geophysics' },
-  { key: Collection.General, label: 'General' },
+  {key: Collection.Astronomy, label: 'Astronomy and Astrophysics'},
+  {key: Collection.Physics, label: 'Physics and Geophysics'},
+  {key: Collection.General, label: 'General'},
 ];
 
 export enum EntryType {
@@ -140,8 +137,8 @@ export enum EntryType {
 }
 
 export const entryTypeOptions: { key: EntryType; label: string }[] = [
-  { key: EntryType.New, label: 'New Record' },
-  { key: EntryType.Edit, label: 'Edit Record' },
+  {key: EntryType.New, label: 'New Record'},
+  {key: EntryType.Edit, label: 'Edit Record'},
 ];
 
 export type SubmitCorrectAbstractFormValues = {

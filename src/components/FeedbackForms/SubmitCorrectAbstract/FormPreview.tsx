@@ -1,11 +1,12 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
-import { apiFetch, ApiTarget } from '../api';
-import { PreviewModal } from '../components';
-import { EntryType, SubmitCorrectAbstractFormValues } from '../models';
-import { createDiffString, ProcessedFormValues, processTree } from './DiffView';
+import {useFormContext} from 'react-hook-form';
+import {apiFetch, ApiTarget} from '../api';
+import {PreviewModal} from '../components';
+import {EntryType, SubmitCorrectAbstractFormValues} from '../models';
+import {createDiffString, ProcessedFormValues, processTree} from './DiffView';
 import PreviewBody from './PreviewBody';
-import { defaultValues, FormSubmissionCtx, OriginCtx } from './SubmitCorrectAbstract';
+import {defaultValues, FormSubmissionCtx, OriginCtx} from './SubmitCorrectAbstract';
+import {useRecaptcha} from '../../../hooks/useRecaptcha';
 
 type FeedbackRequest = {
   original: ProcessedFormValues;
@@ -39,27 +40,31 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
   onSubmit,
   disabled = false,
 }) => {
-  const { trigger, getValues, reset } = useFormContext<
+  const {trigger, getValues, reset} = useFormContext<
     SubmitCorrectAbstractFormValues
   >();
+  const {execute} = useRecaptcha('submit_correct_abstract');
   const [show, setShow] = React.useState(false);
   const handlePreview = async () => {
     if (await trigger()) {
       setShow(true);
     }
   };
+
   const handleReset = () => reset(defaultValues);
   const previewRef = React.useRef<HTMLDivElement | null>(null);
-  const { origin } = React.useContext(OriginCtx);
-  const { setSubmissionState } = React.useContext(FormSubmissionCtx);
+  const {origin} = React.useContext(OriginCtx);
+  const {setSubmissionState} = React.useContext(FormSubmissionCtx);
 
   const handleSubmit = async () => {
-    setSubmissionState({ status: 'pending' });
+    setSubmissionState({status: 'pending'});
+
 
     if (previewRef.current) {
       const currentValues = {
         ...origin,
         ...getValues(),
+        recaptcha: await execute(),
       };
 
       try {
@@ -74,7 +79,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           onSubmit();
         }
 
-        setSubmissionState({ status: 'success' });
+        setSubmissionState({status: 'success'});
         handleReset();
       } catch (e) {
         setSubmissionState({
@@ -135,7 +140,7 @@ const createFeedbackString = (
   current: SubmitCorrectAbstractFormValues,
   previewText: string,
 ): FeedbackRequest => {
-  const { name, email, recaptcha, entryType } = current;
+  const {name, email, recaptcha, entryType} = current;
   return {
     origin: 'user_submission',
     'g-recaptcha-response': recaptcha,

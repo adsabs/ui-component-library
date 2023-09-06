@@ -1,5 +1,4 @@
 const bundled = [
-  'react-google-recaptcha',
   'react-async-script',
   'hoist-non-react-statics',
 ];

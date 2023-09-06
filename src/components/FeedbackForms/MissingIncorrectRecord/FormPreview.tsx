@@ -1,12 +1,13 @@
 import React from 'react';
-import { IfFulfilled, IfRejected, useAsync } from 'react-async';
-import { useFormContext } from 'react-hook-form';
-import { JSONResponse } from '../../../hooks';
-import { apiFetch, ApiTarget } from '../api';
-import { PreviewModal } from '../components';
-import { MissingIncorrectRecordFormValues } from '../models';
-import { defaultValues } from './MissingIncorrectRecord';
-import PreviewBody, { fetchReference } from './PreviewBody';
+import {IfFulfilled, IfRejected, useAsync} from 'react-async';
+import {useFormContext} from 'react-hook-form';
+import {JSONResponse} from '../../../hooks';
+import {apiFetch, ApiTarget} from '../api';
+import {PreviewModal} from '../components';
+import {MissingIncorrectRecordFormValues} from '../models';
+import {defaultValues} from './MissingIncorrectRecord';
+import PreviewBody, {fetchReference} from './PreviewBody';
+import {useRecaptcha} from '../../../hooks/useRecaptcha';
 
 const fetchBibcodes = ([bibcodes]: [string[]]) => {
   return apiFetch({
@@ -35,24 +36,25 @@ interface IFormPreview {
   onSubmit?: () => void;
 }
 
-const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
-  const { getValues, setError, trigger, reset } = useFormContext<
+const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
+  const {getValues, setError, trigger, reset} = useFormContext<
     MissingIncorrectRecordFormValues
   >();
+  const {execute} = useRecaptcha('missing_incorrect_record')
   const [show, setShow] = React.useState(false);
   const [ids, setIds] = React.useState<string[]>([]);
   const state = useAsync<JSONResponse>({
     deferFn: fetchBibcodes,
   });
-  const { run, isPending, isFulfilled, data, error } = state;
+  const {run, isPending, isFulfilled, data, error} = state;
 
   const handleReset = () => reset(defaultValues);
 
   const onPreview = async () => {
     if (await trigger()) {
-      const { bibcodes } = getValues();
+      const {bibcodes} = getValues();
       const bibcodeSet = new Set<string>();
-      bibcodes.forEach(({ cited, citing }) => {
+      bibcodes.forEach(({cited, citing}) => {
         bibcodeSet.add(cited.trim());
         bibcodeSet.add(citing.trim());
       });
@@ -64,13 +66,13 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
 
   React.useEffect(() => {
     if (isFulfilled) {
-      const { bibcodes } = getValues();
+      const {bibcodes} = getValues();
 
       if (ids.length !== data?.response.numFound) {
         const bibs = data?.response.docs.map((e) => e.bibcode);
         const diff = ids.filter((e) => !bibs?.includes(e));
 
-        bibcodes.forEach(({ citing, cited }, i) => {
+        bibcodes.forEach(({citing, cited}, i) => {
           if (diff.includes(citing.trim())) {
             setError(`bibcodes[${i}].citing`, {
               type: 'validate',
@@ -93,8 +95,9 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
 
   const handleSubmit = async () => {
     try {
-      const values = getValues();
+      const values = {...getValues(), recaptcha: await execute()};
       const exportResponse = await fetchReference(values.bibcodes);
+
       await submitFeedback(
         createFeedbackString(values, exportResponse?.export.split(/\n/g)),
       );
@@ -127,7 +130,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
       </div>
 
       <IfRejected state={state}>
-        <div className="alert alert-danger" style={{ marginTop: '1rem' }}>
+        <div className="alert alert-danger" style={{marginTop: '1rem'}}>
           {(error as any)?.responseJSON?.error || 'Server Error'}
         </div>
       </IfRejected>
@@ -135,6 +138,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
       <IfFulfilled state={state}>
         <PreviewModal
           show={show}
+          formName="missing-incorrect-record"
           onHide={() => {
             setShow(false);
           }}
@@ -170,7 +174,7 @@ const createFeedbackString = (
   props: MissingIncorrectRecordFormValues,
   referenceString: string[],
 ): FeedbackRequest => {
-  const { name, email, bibcodes, recaptcha } = props;
+  const {name, email, bibcodes, recaptcha} = props;
 
   return {
     origin: 'user_submission',
@@ -178,7 +182,7 @@ const createFeedbackString = (
     _subject: 'Missing References',
     name,
     email,
-    references: bibcodes.map(({ citing, cited }, i) => ({
+    references: bibcodes.map(({citing, cited}, i) => ({
       citing: citing.trim(),
       cited: cited.trim(),
       refstring: referenceString[i],
