@@ -1,11 +1,12 @@
-import React from 'react';
-import { IfFulfilled, IfRejected, useAsync } from 'react-async';
-import { useFormContext } from 'react-hook-form';
-import { JSONResponse } from '../../../hooks';
-import { apiFetch, ApiTarget } from '../api';
-import { PreviewModal } from '../components';
-import { AssociatedArticlesFormValues } from '../models';
+import React, {useCallback} from 'react';
+import {IfFulfilled, IfRejected, useAsync} from 'react-async';
+import {useFormContext} from 'react-hook-form';
+import {JSONResponse} from '../../../hooks';
+import {apiFetch, ApiTarget} from '../api';
+import {PreviewModal} from '../components';
+import {AssociatedArticlesFormValues} from '../models';
 import PreviewBody from './PreviewBody';
+import {useRecaptcha} from '../../../hooks/useRecaptcha';
 
 const fetchBibcodes = ([bibcodes]: [string[]]) => {
   return apiFetch({
@@ -34,16 +35,17 @@ interface IFormPreview {
   onSubmit?: () => void;
 }
 
-const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
-  const { getValues, trigger, setError, reset, setValue } = useFormContext<
+const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
+  const {getValues, trigger, setError, reset, setValue} = useFormContext<
     AssociatedArticlesFormValues
   >();
+  const {execute} = useRecaptcha('associated')
   const [show, setShow] = React.useState(false);
   const [ids, setIds] = React.useState<string[]>([]);
   const state = useAsync<JSONResponse>({
     deferFn: fetchBibcodes,
   });
-  const { run, isPending, isFulfilled, data, error } = state;
+  const {run, isPending, isFulfilled, data, error} = state;
 
   const handleReset = () => {
     reset();
@@ -52,7 +54,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
 
   const onPreview = async () => {
     if (await trigger()) {
-      const { sourceBibcode, associated } = getValues();
+      const {sourceBibcode, associated} = getValues();
       const bibcodeSet = new Set<string>([
         sourceBibcode,
         ...associated.map((a) => a.bibcode),
@@ -63,16 +65,18 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(async () => {
     if (typeof onSubmit === 'function') {
       onSubmit();
     }
-    submitFeedback(createFeedbackString(getValues()));
-  };
+    const params = getValues();
+    params.recaptcha = await execute();
+    await submitFeedback(createFeedbackString(params));
+  }, [execute, getValues, onSubmit]);
 
   React.useEffect(() => {
     if (isFulfilled) {
-      const { associated, sourceBibcode } = getValues();
+      const {associated, sourceBibcode} = getValues();
       if (ids.length !== data?.response.numFound) {
         const bibs = data?.response.docs.map((e) => e.bibcode);
         const diff = ids.filter((e) => !bibs?.includes(e));
@@ -86,7 +90,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
         }
 
         // find all associated entries, and set errors
-        associated.forEach(({ bibcode }, i) => {
+        associated.forEach(({bibcode}, i) => {
           if (diff.includes(bibcode)) {
             setError(`associated[${i}].bibcode`, {
               type: 'validate',
@@ -120,10 +124,10 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
         </button>
       </div>
       <IfRejected state={state}>
-        <div className="alert alert-danger" style={{ marginTop: '1rem' }}>
+        <div className="alert alert-danger" style={{marginTop: '1rem'}}>
           {(error as any)?.responseJSON?.error || 'Server Error'}
         </div>
-        <div className="alert alert-info" style={{ marginTop: '1rem' }}>
+        <div className="alert alert-info" style={{marginTop: '1rem'}}>
           Sorry! we're having issues server-side. Please try again or send us an
           email at <strong>adshelp(at)cfa.harvard.edu</strong>
         </div>
@@ -131,6 +135,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
 
       <IfFulfilled state={state}>
         <PreviewModal
+          formName="associated"
           show={show}
           onHide={() => {
             setShow(false);
