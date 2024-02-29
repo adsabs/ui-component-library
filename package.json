@@ -80,7 +80,7 @@
     "react-redux": "^7.2.0",
     "react-table": "^7.2.0",
     "react-window": "^1.8.5",
-    "rfc6902": "^3.0.4",
+    "rfc6902": "^5.0.0",
     "rollup-plugin-filesize": "^7.0.0",
     "rollup-plugin-includepaths": "^0.2.3",
     "styled-components": "^5.1.0",
