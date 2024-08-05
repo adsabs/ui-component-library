@@ -40,6 +40,12 @@ export const relationOptions: RelationOption[] = [
     label: 'arXiv',
     secondaryLabel: 'Main Paper',
   },
+  {
+    key: 'duplicate',
+    text: 'Duplicate',
+    label: 'Main Paper',
+    secondaryLabel: 'Duplicate',
+  },
   {key: 'other', text: 'Other', label: '', secondaryLabel: 'Related'},
 ];
 
