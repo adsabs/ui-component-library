@@ -39,6 +39,7 @@ export const fetchReference = (
       data: JSON.stringify({
         bibcode: bibcodes.map((e) => e.cited),
         format: ['%R (%1l (%Y), %Q)'],
+        sort: ['bibcode desc']
       }),
     },
   });

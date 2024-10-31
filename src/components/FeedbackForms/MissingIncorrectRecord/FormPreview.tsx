@@ -182,10 +182,10 @@ const createFeedbackString = (
     _subject: 'Missing References',
     name,
     email,
-    references: bibcodes.map(({citing, cited}, i) => ({
+    references: bibcodes.map(({citing, cited}) => ({
       citing: citing.trim(),
       cited: cited.trim(),
-      refstring: referenceString[i],
+      refstring: referenceString.find(ref => ref.startsWith(cited.trim())) ?? 'not-found'
     })),
   };
 };
