@@ -72,7 +72,10 @@ export const apiFetch = (props: IApiFetchProps) => {
 };
 
 export enum ApiTarget {
+  BOOTSTRAP = '/accounts/bootstrap',
   SEARCH = 'search/query',
+  QTREE = 'search/qtree',
+  BIGQUERY = 'search/bigquery',
   EXPORT = 'export/',
   SERVICE_AUTHOR_NETWORK = 'vis/author-network',
   SERVICE_PAPER_NETWORK = 'vis/paper-network',
@@ -92,10 +95,12 @@ export enum ApiTarget {
   USER_DATA = 'vault/user-data',
   SITE_CONFIGURATION = 'vault/configuration',
   TOKEN = 'accounts/token',
+  LOGIN = 'accounts/login',
   LOGOUT = 'accounts/logout',
   REGISTER = 'accounts/register',
   VERIFY = 'accounts/verify',
-  DELETE = 'accounts/user/delete',
+  DELETE = 'accounts/delete',
+  INFO = 'accounts/info',
   RESET_PASSWORD = 'accounts/reset-password',
   CHANGE_PASSWORD = 'accounts/change-password',
   CHANGE_EMAIL = 'accounts/change-email',
