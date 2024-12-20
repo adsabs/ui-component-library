@@ -6,7 +6,11 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FormErrorBoundary } from '../components';
-import { AssociatedArticlesFormValues, ReduxState, relationOptions } from '../models';
+import {
+  AssociatedArticlesFormValues,
+  ReduxState,
+  relationOptions,
+} from '../models';
 import MainForm from './MainForm';
 
 const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.object().shape(
@@ -17,28 +21,44 @@ const validationSchema: Yup.ObjectSchema<AssociatedArticlesFormValues> = Yup.obj
       .required('Required'),
     relation: Yup.mixed().oneOf(
       relationOptions.map(({ key }) => key),
-      'Must select a relation',
+      'Must select a relation'
     ),
     customRelation: Yup.string().test(
       'customRelationRequired',
       'Must set a custom relation',
-      function (value) {
+      function(value) {
         const isOther = this.parent.relation === 'other';
         return !(isOther && value === '');
-      },
+      }
     ),
     sourceBibcode: Yup.string()
       .required('Source bibcode is required')
       .length(19, 'Invalid Bibcode'),
-    associated: Yup.array(
-      Yup.object({
-        bibcode: Yup.string()
-          .required('Associated bibcode is blank')
-          .length(19, 'Invalid Bibcode'),
-      }),
-    ),
+    associated: Yup.mixed().when('relation', {
+      is: 'other',
+      then: Yup.array<{ bibcode: string }>(
+        Yup.object({
+          bibcode: Yup.string()
+            .required('Related bibcode, URL or DOI is blank')
+            .test(
+              'valideBibcode',
+              'Must be a valid bibcode, URL or DOI',
+              function(value) {
+                return value.indexOf('/') !== -1 || value.length === 19;
+              }
+            ),
+        })
+      ),
+      otherwise: Yup.array<{ bibcode: string }>(
+        Yup.object({
+          bibcode: Yup.string()
+            .required('Associated bibcode is blank')
+            .length(19, 'Invalid Bibcode'),
+        })
+      ),
+    }),
     recaptcha: Yup.string().ensure(),
-  },
+  }
 );
 
 export const defaultValues: AssociatedArticlesFormValues = {
@@ -55,7 +75,7 @@ const emailSelector = ({ user }: ReduxState) => user.email;
 
 const AssociatedReferences: React.FunctionComponent = () => {
   const email = useSelector<ReduxState, AssociatedArticlesFormValues['email']>(
-    emailSelector,
+    emailSelector
   );
 
   const methods = useForm<AssociatedArticlesFormValues>({
@@ -100,7 +120,7 @@ const AssociatedReferences: React.FunctionComponent = () => {
         </FlexView>
         <FormProvider {...(methods as any)}>
           <form>
-            <MainForm onSubmit={onSubmit}/>
+            <MainForm onSubmit={onSubmit} />
           </form>
         </FormProvider>
       </FlexView>

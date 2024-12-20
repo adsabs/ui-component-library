@@ -32,7 +32,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
   const getErrorMessage = (
     index: number,
     field: string,
-    innerField: string,
+    innerField: string
   ): string | undefined => {
     return errors?.[field]?.[index]?.[innerField]?.message;
   };
@@ -66,7 +66,9 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
                 field={`associated[${index}].bibcode`}
                 type="text"
                 a11yPrefix="feedback"
-                label={`${secondaryLabel} Bibcode ${index + 1}`}
+                label={`${secondaryLabel} Bibcode${
+                  relation === 'other' ? ', URL or DOI' : `${index + 1}`
+                }`}
                 placeholder={placeholder}
                 ref={register()}
                 defaultValue={bibcode}
@@ -78,7 +80,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
                     onClick={() => handleRemove(index)}
                     disabled={fields.length <= 1}
                   >
-                    <i className="fa fa-trash" aria-hidden="true"/>
+                    <i className="fa fa-trash" aria-hidden="true" />
                     <span className="sr-only">Remove</span>
                   </button>
                 }
@@ -95,7 +97,7 @@ const BibcodeList: React.FunctionComponent<IBibcodeListProps> = ({
             onClick={handleAdd}
             disabled={fields.length > 10}
           >
-            <i className="fa fa-plus" aria-hidden="true"/> Add new row
+            <i className="fa fa-plus" aria-hidden="true" /> Add new row
           </button>
         )}
       </FlexView>
@@ -114,7 +116,7 @@ BibcodeList.propTypes = {
 };
 
 const getBibcodePlaceholder = (
-  type: AssociatedArticlesFormValues['relation'],
+  type: AssociatedArticlesFormValues['relation']
 ) => {
   switch (type) {
     case 'arxiv':
