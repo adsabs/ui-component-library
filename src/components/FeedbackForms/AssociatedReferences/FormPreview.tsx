@@ -1,12 +1,12 @@
-import React, {useCallback} from 'react';
-import {IfFulfilled, IfRejected, useAsync} from 'react-async';
-import {useFormContext} from 'react-hook-form';
-import {JSONResponse} from '../../../hooks';
-import {apiFetch, ApiTarget} from '../api';
-import {PreviewModal} from '../components';
-import {AssociatedArticlesFormValues} from '../models';
+import React, { useCallback } from 'react';
+import { IfFulfilled, IfRejected, useAsync } from 'react-async';
+import { useFormContext } from 'react-hook-form';
+import { JSONResponse } from '../../../hooks';
+import { apiFetch, ApiTarget } from '../api';
+import { PreviewModal } from '../components';
+import { AssociatedArticlesFormValues } from '../models';
 import PreviewBody from './PreviewBody';
-import {useRecaptcha} from '../../../hooks/useRecaptcha';
+import { useRecaptcha } from '../../../hooks/useRecaptcha';
 
 const fetchBibcodes = ([bibcodes]: [string[]]) => {
   return apiFetch({
@@ -35,17 +35,17 @@ interface IFormPreview {
   onSubmit?: () => void;
 }
 
-const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
-  const {getValues, trigger, setError, reset, setValue} = useFormContext<
+const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
+  const { getValues, trigger, setError, reset, setValue } = useFormContext<
     AssociatedArticlesFormValues
   >();
-  const {execute} = useRecaptcha('associated')
+  const { execute } = useRecaptcha('associated');
   const [show, setShow] = React.useState(false);
   const [ids, setIds] = React.useState<string[]>([]);
   const state = useAsync<JSONResponse>({
     deferFn: fetchBibcodes,
   });
-  const {run, isPending, isFulfilled, data, error} = state;
+  const { run, isPending, isFulfilled, data, error } = state;
 
   const handleReset = () => {
     reset();
@@ -54,11 +54,17 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
 
   const onPreview = async () => {
     if (await trigger()) {
-      const {sourceBibcode, associated} = getValues();
-      const bibcodeSet = new Set<string>([
-        sourceBibcode,
-        ...associated.map((a) => a.bibcode),
-      ]);
+      const { sourceBibcode, associated, relation } = getValues();
+      // if relation is other, only validate bibcode if it looks like a bibcode
+      const rest =
+        relation !== 'other'
+          ? associated.map((a) => a.bibcode)
+          : associated
+              .filter(
+                (a) => a.bibcode.length === 19 && a.bibcode.indexOf('/') === -1
+              )
+              .map((a) => a.bibcode);
+      const bibcodeSet = new Set<string>([sourceBibcode, ...rest]);
       const uniqBibs = Array.from(bibcodeSet);
       setIds(uniqBibs);
       run(uniqBibs);
@@ -76,7 +82,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
 
   React.useEffect(() => {
     if (isFulfilled) {
-      const {associated, sourceBibcode} = getValues();
+      const { associated, sourceBibcode } = getValues();
       if (ids.length !== data?.response.numFound) {
         const bibs = data?.response.docs.map((e) => e.bibcode);
         const diff = ids.filter((e) => !bibs?.includes(e));
@@ -85,16 +91,16 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
         if (diff.includes(sourceBibcode)) {
           setError('sourceBibcode', {
             type: 'validate',
-            message: 'Bibcode wasn\'t found in ADS',
+            message: "Bibcode wasn't found in ADS",
           });
         }
 
         // find all associated entries, and set errors
-        associated.forEach(({bibcode}, i) => {
+        associated.forEach(({ bibcode }, i) => {
           if (diff.includes(bibcode)) {
             setError(`associated[${i}].bibcode`, {
               type: 'validate',
-              message: 'Bibcode wasn\'t found in ADS',
+              message: "Bibcode wasn't found in ADS",
             });
           }
         });
@@ -114,7 +120,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
           disabled={isPending}
         >
           {isPending ? (
-            <i className="fa fa-spinner fa-spin" aria-hidden/>
+            <i className="fa fa-spinner fa-spin" aria-hidden />
           ) : (
             'Preview'
           )}
@@ -124,10 +130,10 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
         </button>
       </div>
       <IfRejected state={state}>
-        <div className="alert alert-danger" style={{marginTop: '1rem'}}>
+        <div className="alert alert-danger" style={{ marginTop: '1rem' }}>
           {(error as any)?.responseJSON?.error || 'Server Error'}
         </div>
-        <div className="alert alert-info" style={{marginTop: '1rem'}}>
+        <div className="alert alert-info" style={{ marginTop: '1rem' }}>
           Sorry! we're having issues server-side. Please try again or send us an
           email at <strong>adshelp(at)cfa.harvard.edu</strong>
         </div>
@@ -148,7 +154,7 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
             setShow(false);
           }}
         >
-          <PreviewBody/>
+          <PreviewBody />
         </PreviewModal>
       </IfFulfilled>
     </>
@@ -170,7 +176,7 @@ type FeedbackRequest = {
 };
 
 const createFeedbackString = (
-  props: AssociatedArticlesFormValues,
+  props: AssociatedArticlesFormValues
 ): FeedbackRequest => {
   const {
     name,
