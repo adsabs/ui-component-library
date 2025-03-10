@@ -20,15 +20,27 @@ const fetchBibcodes = ([bibcodes]: [string[]]) => {
 };
 
 const submitFeedback = async (data: FeedbackRequest) => {
-  return await apiFetch({
-    target: ApiTarget.FEEDBACK,
-    options: {
-      method: 'POST',
-      data: JSON.stringify(data),
-      dataType: 'json',
-      contentType: 'application/json; charset=UTF-8',
-    },
-  });
+  try {
+    return await apiFetch({
+      target: ApiTarget.FEEDBACK,
+      options: {
+        method: 'POST',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json; charset=UTF-8',
+      },
+    });
+  } catch (e) {
+    return await apiFetch({
+      target: ApiTarget.FEEDBACK_FALLBACK,
+      options: {
+        method: 'POST',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json; charset=UTF-8',
+      },
+    });
+  }
 };
 
 interface IFormPreview {
