@@ -75,4 +75,5 @@ export enum ApiTarget {
   SEARCH = 'search/query',
   EXPORT = 'export/',
   FEEDBACK = 'feedback',
+  FEEDBACK_FALLBACK = 'feedback/userfeedback',
 }
