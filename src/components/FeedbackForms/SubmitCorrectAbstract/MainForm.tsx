@@ -39,7 +39,7 @@ const MainForm: React.FunctionComponent<IMainFormProps> = ({ onSubmit }) => {
           required
         />
         <Control
-          type="text"
+          type="email"
           field="email"
           label="Email"
           a11yPrefix="feedback"
