@@ -9,7 +9,6 @@ export type FullRecord = Omit<
   | 'entryType'
   | 'name'
   | 'email'
-  | 'collection'
   | 'objects'
   | 'references'
   | 'comments'
@@ -75,7 +74,7 @@ const fetchFullRecord = _.memoize(
       target: ApiTarget.SEARCH,
       query: {
         fl:
-          'title,author,aff,pub_raw,pubdate,abstract,volume,bibcode,keyword,orcid_pub',
+          'title,author,aff,pub_raw,pubdate,abstract,volume,bibcode,keyword,orcid_pub,database',
         q: `identifier:${identifier}`,
         rows: 1,
       },
@@ -94,6 +93,7 @@ const fetchFullRecord = _.memoize(
         author = [],
         aff = [],
         orcid_pub = [],
+        database = []
       } = response.response.docs[0];
 
       const authors = author.map((name, position) => ({
@@ -111,6 +111,7 @@ const fetchFullRecord = _.memoize(
         abstract,
         bibcode,
         authors,
+        collection: database,
         keywords: keywords.map((k) => ({ value: k })),
         urls,
         confirmNoAuthor: false,

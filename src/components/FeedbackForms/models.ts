@@ -127,7 +127,7 @@ export type Keyword = {
 export enum Collection {
   Astronomy = 'astronomy',
   Physics = 'physics',
-  EarthScience = 'earthscience',
+  EarthScience = 'earth science',
   General = 'general',
 }
 

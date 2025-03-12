@@ -1,4 +1,5 @@
 import {PubSubEvent} from '../../hooks';
+import {Collection} from './models';
 
 type BumblebeeApp = any;
 declare var bbb: BumblebeeApp;
@@ -16,6 +17,7 @@ type ArticleRecord = {
   pubnote: string;
   aff: string[];
   orcid_pub: string[];
+  database: Collection[]
 };
 
 export type JSONResponse = {
