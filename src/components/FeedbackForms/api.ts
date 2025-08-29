@@ -1,8 +1,8 @@
-import {PubSubEvent} from '../../hooks';
-import {Collection} from './models';
+import { PubSubEvent } from '../../hooks';
+import { Collection } from './models';
 
 type BumblebeeApp = any;
-declare var bbb: BumblebeeApp;
+declare var __UNSAFE_BBB_APP_INSTANCE__: BumblebeeApp;
 type ArticleRecord = {
   id: string;
   bibcode: string;
@@ -17,7 +17,7 @@ type ArticleRecord = {
   pubnote: string;
   aff: string[];
   orcid_pub: string[];
-  database: Collection[]
+  database: Collection[];
 };
 
 export type JSONResponse = {
@@ -41,12 +41,14 @@ interface IApiFetchProps {
 }
 
 export const apiFetch = (props: IApiFetchProps) => {
-  const {options, target, query} = props;
+  const { options, target, query } = props;
 
-  const bumblebeeGlobal = bbb ? bbb : null;
+  const bumblebeeGlobal = __UNSAFE_BBB_APP_INSTANCE__
+    ? __UNSAFE_BBB_APP_INSTANCE__
+    : null;
   return new Promise<JSONResponse>((resolve, reject) => {
     const ps = bumblebeeGlobal.__beehive.getService('PubSub');
-    const {makeApiQuery, makeApiRequest} = bumblebeeGlobal.getObject('Utils');
+    const { makeApiQuery, makeApiRequest } = bumblebeeGlobal.getObject('Utils');
     const request = makeApiRequest({
       target,
       query: makeApiQuery(query),
