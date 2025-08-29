@@ -1,7 +1,7 @@
 import React from 'react';
 
 type BumblebeeApp = any;
-declare var bbb: BumblebeeApp;
+declare var __UNSAFE_BBB_APP_INSTANCE__: BumblebeeApp;
 
 type ArticleRecord = {
   id: string;
@@ -17,7 +17,9 @@ export type JSONResponse = {
 };
 
 const useBumblebee = () => {
-  const bumblebeeGlobal = React.useRef<BumblebeeApp>(bbb);
+  const bumblebeeGlobal = React.useRef<BumblebeeApp>(
+    __UNSAFE_BBB_APP_INSTANCE__
+  );
 
   return {
     app: bumblebeeGlobal.current,
