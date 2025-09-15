@@ -1,7 +1,7 @@
-import {ArrayChange, Change, diffArrays, diffWords} from 'diff';
+import { ArrayChange, Change, diffArrays, diffWords } from 'diff';
 import React from 'react';
 import styled from 'styled-components';
-import {SubmitCorrectAbstractFormValues} from '../models';
+import { SubmitCorrectAbstractFormValues } from '../models';
 
 interface IDiffViewProps {
   left: SubmitCorrectAbstractFormValues;
@@ -9,15 +9,12 @@ interface IDiffViewProps {
 }
 
 const DiffView: React.FC<IDiffViewProps> = React.memo(
-  ({left, right}) => {
+  ({ left, right }) => {
     const leftObj = processTree(left);
     const rightObj = processTree(right);
 
     const sections = Object.keys(leftObj).map((key) => {
       const isArray = Array.isArray(leftObj[key]);
-      if (isArray && leftObj[key].length === 0) {
-        return null;
-      }
       let changes: (ArrayChange<string> | Change)[] = [];
 
       try {
@@ -26,7 +23,6 @@ const DiffView: React.FC<IDiffViewProps> = React.memo(
         } else if (typeof leftObj[key] === 'string') {
           changes = diffWords(leftObj[key], rightObj[key]);
         }
-
       } catch (e) {
         return null;
       }
@@ -67,7 +63,7 @@ const DiffView: React.FC<IDiffViewProps> = React.memo(
     );
   },
   (prevProps, nextProps) =>
-    JSON.stringify(prevProps) !== JSON.stringify(nextProps),
+    JSON.stringify(prevProps) !== JSON.stringify(nextProps)
 );
 
 interface ITextChangeElementProps {
@@ -76,7 +72,7 @@ interface ITextChangeElementProps {
   right: ProcessedFormValues;
 }
 
-const TextChanges = ({keyProp, changes, right}: ITextChangeElementProps) => {
+const TextChanges = ({ keyProp, changes, right }: ITextChangeElementProps) => {
   return (
     <>
       <Bold>Diff:</Bold>
@@ -88,8 +84,8 @@ const TextChanges = ({keyProp, changes, right}: ITextChangeElementProps) => {
         }
         return [...list, <Text inline>{change.value}</Text>];
       }, [])}
-      <br/>
-      <br/>
+      <br />
+      <br />
       <Bold>Updated:</Bold>
       <pre>{right[keyProp]}</pre>
     </>
@@ -101,7 +97,7 @@ interface IArrayChangeElementProps {
   changes: ArrayChange<string>[];
 }
 
-const ArrayChanges = ({keyProp, changes}: IArrayChangeElementProps) => {
+const ArrayChanges = ({ keyProp, changes }: IArrayChangeElementProps) => {
   let i = 0;
   return (
     <>
@@ -113,8 +109,8 @@ const ArrayChanges = ({keyProp, changes}: IArrayChangeElementProps) => {
             ...val,
             ...change.value.map((v, idx) => (
               <Add key={`${keyProp} ${idx + currentCount}`}>{`+ ${idx +
-              currentCount +
-              1} ${v}`}</Add>
+                currentCount +
+                1} ${v}`}</Add>
             )),
           ];
         } else if (change.removed) {
@@ -122,8 +118,8 @@ const ArrayChanges = ({keyProp, changes}: IArrayChangeElementProps) => {
             ...val,
             ...change.value.map((v, idx) => (
               <Remove key={`${keyProp} ${i + idx}`}>{`- ${i +
-              idx +
-              1} ${v}`}</Remove>
+                idx +
+                1} ${v}`}</Remove>
             )),
           ];
         }
@@ -162,7 +158,7 @@ const SectionTitle = styled.div`
   text-transform: capitalize;
 `;
 
-const Section: React.FC<{ title: string }> = ({title, children}) => {
+const Section: React.FC<{ title: string }> = ({ title, children }) => {
   return (
     <div className="panel panel-info">
       <SectionTitle className="panel-heading">{title}</SectionTitle>
@@ -188,7 +184,7 @@ export interface ProcessedFormValues {
 }
 
 export const processTree = (
-  obj: SubmitCorrectAbstractFormValues,
+  obj: SubmitCorrectAbstractFormValues
 ): ProcessedFormValues => {
   const {
     comments = '',
@@ -211,16 +207,16 @@ export const processTree = (
     publicationDate,
     title,
     abstract,
-    keywords: keywords.map(({value}) => value),
+    keywords: keywords.map(({ value }) => value),
     authors: authors.map((author) => author.name),
-    affiliation: authors.map(({aff}) => aff),
-    orcid: authors.map(({orcid}) => orcid),
+    affiliation: authors.map(({ aff }) => aff),
+    orcid: authors.map(({ orcid }) => orcid),
     collection: collection.filter((c) => c).map((c) => c),
     urls: urls
-      .filter(({value, type}) => type && value.length > 0)
+      .filter(({ value, type }) => type && value.length > 0)
       .map((u) => `${u.type ? `(${u.type}) ` : ''}${u.value}`),
     references: references
-      .filter(({value}) => value.length > 0)
+      .filter(({ value }) => value.length > 0)
       .map((r) => `${r.type ? `(${r.type}) ` : ''}${r.value}`),
   };
 };
@@ -241,7 +237,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
   const entries = changes.reduce((acc, change) => {
     return [
       ...acc,
-      ...change.value.map((v) => ({count: 1, ...change, value: v})),
+      ...change.value.map((v) => ({ count: 1, ...change, value: v })),
     ];
   }, []);
 
@@ -258,7 +254,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
       // actual change made to multiple entries in a row, they are matched by index, not sequential
 
       out.push(
-        `${index} ${strikeText(entries[i].value)}${entries[i + count].value}`,
+        `${index} ${strikeText(entries[i].value)}${entries[i + count].value}`
       );
       entries[i + count] = {
         count: entries[i + count].count,
@@ -269,7 +265,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
       // actual change made, this should show up as text striked through
 
       out.push(`${index} ${strikeText(entries[i].value)}${entries[j].value}`);
-      entries[j] = {value: entries[j].value, count: entries[j].count};
+      entries[j] = { value: entries[j].value, count: entries[j].count };
       index += 1;
     } else if (entries[i].removed) {
       // entry fully removed from the list, strike through full string including index
@@ -316,7 +312,7 @@ const stringifyWordChanges = (changes: Change[]) => {
 
 export function createDiffString(
   left: SubmitCorrectAbstractFormValues,
-  right: SubmitCorrectAbstractFormValues,
+  right: SubmitCorrectAbstractFormValues
 ) {
   const leftObj = processTree(left);
   const rightObj = processTree(right);
@@ -337,7 +333,6 @@ export function createDiffString(
       } else if (typeof leftObj[key] === 'string') {
         changes = diffWords(leftObj[key], rightObj[key]);
       }
-
     } catch (e) {
       return null;
     }
@@ -354,10 +349,10 @@ export function createDiffString(
     return `
   >>>> ${sectionTitle}
   ${
-      isArray
-        ? stringifyArrayChanges(changes as ArrayChange<string>[])
-        : stringifyWordChanges(changes as Change[])
-    }
+    isArray
+      ? stringifyArrayChanges(changes as ArrayChange<string>[])
+      : stringifyWordChanges(changes as Change[])
+  }
   <<<<`;
   });
 
