@@ -55,6 +55,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
   >();
   const {execute} = useRecaptcha('missing_incorrect_record')
   const [show, setShow] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [recaptchaError, setRecaptchaError] = React.useState<string | null>(null);
   const [ids, setIds] = React.useState<string[]>([]);
   const state = useAsync<JSONResponse>({
     deferFn: fetchBibcodes,
@@ -107,8 +109,33 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
   }, [isFulfilled]);
 
   const handleSubmit = async () => {
+    setRecaptchaError(null);
+    setIsSubmitting(true);
+    let recaptchaToken: string;
     try {
-      const values = {...getValues(), recaptcha: await execute()};
+      recaptchaToken = await execute();
+    } catch (err) {
+      setRecaptchaError(
+        'reCAPTCHA could not run. Please allow Google reCAPTCHA or email adshelp@cfa.harvard.edu.'
+      );
+      try {
+        const sentry = (window as any).Sentry;
+        if (sentry && typeof sentry.captureMessage === 'function') {
+          sentry.captureMessage('recaptcha-error', {
+            level: 'error',
+            extra: {
+              action: 'missing_incorrect_record',
+              message: err?.message || err,
+            },
+          });
+        }
+      } catch (_) {}
+      setIsSubmitting(false);
+      return false;
+    }
+
+    try {
+      const values = {...getValues(), recaptcha: recaptchaToken};
       const exportResponse = await fetchReference(values.bibcodes);
 
       await submitFeedback(
@@ -117,8 +144,11 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
       if (typeof onSubmit === 'function') {
         onSubmit();
       }
+      setIsSubmitting(false);
+      return true;
     } catch (e) {
-      // TODO: handle submission error that bubbles to here
+      setIsSubmitting(false);
+      return false;
     }
   };
 
@@ -155,14 +185,26 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
           onHide={() => {
             setShow(false);
           }}
-          onSubmit={() => {
-            handleSubmit();
-            setShow(false);
+          onSubmit={async () => {
+            const success = await handleSubmit();
+            if (success) {
+              setShow(false);
+            }
           }}
           onCancel={() => {
             setShow(false);
           }}
         >
+          {recaptchaError && (
+            <div className="alert alert-danger" style={{marginBottom: '1rem'}}>
+              {recaptchaError}
+            </div>
+          )}
+          {isSubmitting && (
+            <div className="alert alert-info" style={{marginBottom: '1rem'}}>
+              Submitting your request...
+            </div>
+          )}
           <PreviewBody/>
         </PreviewModal>
       </IfFulfilled>
