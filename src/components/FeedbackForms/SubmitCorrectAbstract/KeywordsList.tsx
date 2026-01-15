@@ -32,11 +32,22 @@ const KeywordsList: React.FC = () => {
     name,
   });
 
+  const inputRefs = React.useRef<Array<HTMLInputElement | null>>([]);
+
   const handleRemove = (index: number) => {
     remove(index);
   };
   const handleAdd = () => {
-    append({ value: '' });
+    const newIndex = fields.length;
+    append({ value: '' }, false);
+
+    // manually set focus to the last row after render
+    setTimeout(() => {
+      const el = inputRefs.current[newIndex];
+      if (el) {
+        el.focus();
+      }
+    }, 0);
   };
 
   const getErrorMessage = React.useCallback(
@@ -54,7 +65,7 @@ const KeywordsList: React.FC = () => {
       }
       return;
     },
-    [errors],
+    [errors]
   );
 
   return (
@@ -75,18 +86,21 @@ const KeywordsList: React.FC = () => {
                   className="btn btn-danger"
                   onClick={() => handleRemove(index)}
                 >
-                  <i className="fa fa-trash" aria-hidden="true"/>
+                  <i className="fa fa-trash" aria-hidden="true" />
                   <span className="sr-only">Remove</span>
                 </button>
               }
-              ref={register()}
+              inputRef={(el) => {
+                register(el);
+                inputRefs.current[index] = el;
+              }}
             />
           </ControlRow>
         );
       })}
       <FlexView hAlignContent="left">
         <button type="button" className="btn btn-default" onClick={handleAdd}>
-          <i className="fa fa-plus" aria-hidden="true"/> Add new keyword
+          <i className="fa fa-plus" aria-hidden="true" /> Add new keyword
         </button>
       </FlexView>
     </ControlContainer>
