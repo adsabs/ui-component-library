@@ -39,6 +39,7 @@ export interface IControlProps {
   actionButton?: React.ReactNode;
   actionButtonPos?: 'start' | 'end';
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
@@ -56,6 +57,7 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
     onChange,
     required,
     inputProps,
+    inputRef,
   } = props;
   const inputId = `${a11yPrefix}_${field}_${type}`;
   const formGroupClasses = [
@@ -78,7 +80,7 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
             type={type}
             name={field}
             id={inputId}
-            ref={ref}
+            ref={inputRef || ref}
             defaultValue={defaultValue}
             placeholder={placeholder}
             className="form-control"
@@ -95,7 +97,7 @@ const Control = React.forwardRef<Ref, IControlProps>((props, ref) => {
           type={type}
           name={field}
           id={inputId}
-          ref={ref}
+          ref={inputRef || ref}
           defaultValue={defaultValue}
           placeholder={placeholder}
           className="form-control"
