@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import {useBumblebee} from './index';
+import {executeRecaptcha as executeCoreRecaptcha} from '../utils/recaptchaCore';
 
 declare global {
   export interface Window {
@@ -15,21 +16,14 @@ export const useRecaptcha = (formName: string) => {
     getAppConfig,
   ]);
 
-  const execute = useCallback(() => {
+  const execute = useCallback((action?: string) => {
+    const actionName = action || `feedback/${formName}`;
     return new Promise<string>((resolve, reject) => {
-      if (window.grecaptcha) {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(siteKey, {action: `feedback/${formName}`}).then((token) => {
-            resolve(token);
-          }).catch((err) => {
-            reject(err);
-          })
-        });
-      } else {
-        reject('Recaptcha not loaded');
-      }
+      executeCoreRecaptcha(siteKey, actionName)
+        .then(resolve)
+        .catch(reject);
     });
-  }, [window.grecaptcha, siteKey, formName]);
+  }, [siteKey, formName]);
 
   return {
     execute,

@@ -57,6 +57,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
   >();
   const {execute} = useRecaptcha('submit_correct_abstract');
   const [show, setShow] = React.useState(false);
+  const [recaptchaError, setRecaptchaError] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const handlePreview = async () => {
     if (await trigger()) {
       setShow(true);
@@ -70,13 +72,43 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
 
   const handleSubmit = async () => {
     setSubmissionState({status: 'pending'});
-
+    setRecaptchaError(null);
+    setIsSubmitting(true);
 
     if (previewRef.current) {
+      let recaptchaToken: string;
+      try {
+        recaptchaToken = await execute();
+      } catch (err) {
+        setRecaptchaError(
+          'reCAPTCHA could not run. Please allow Google reCAPTCHA or email adshelp@cfa.harvard.edu.'
+        );
+        try {
+          const sentry = (window as any).Sentry;
+          if (sentry && typeof sentry.captureMessage === 'function') {
+            sentry.captureMessage('recaptcha-error', {
+              level: 'error',
+              extra: {
+                action: 'submit_correct_abstract',
+                message: err?.message || err,
+              },
+            });
+          }
+        } catch (_) {}
+        setSubmissionState({
+          status: 'error',
+          message: 'Recaptcha unavailable',
+          code: 0,
+          changes: '',
+        });
+        setIsSubmitting(false);
+        return false;
+      }
+
       const currentValues = {
         ...origin,
         ...getValues(),
-        recaptcha: await execute(),
+        recaptcha: recaptchaToken,
       };
 
       try {
@@ -93,6 +125,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
 
         setSubmissionState({status: 'success'});
         handleReset();
+        setIsSubmitting(false);
+        return true;
       } catch (e) {
         setSubmissionState({
           status: 'error',
@@ -100,8 +134,12 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
           code: e?.status,
           changes: getSafeDiff(origin, currentValues),
         });
+        setIsSubmitting(false);
+        return false;
       }
     }
+    setIsSubmitting(false);
+    return false;
   };
 
   return (
@@ -124,14 +162,26 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
         onHide={() => {
           setShow(false);
         }}
-        onSubmit={() => {
-          handleSubmit();
-          setShow(false);
+        onSubmit={async () => {
+          const success = await handleSubmit();
+          if (success) {
+            setShow(false);
+          }
         }}
         onCancel={() => {
           setShow(false);
         }}
       >
+        {recaptchaError && (
+          <div className="alert alert-danger" style={{marginBottom: '1rem'}}>
+            {recaptchaError}
+          </div>
+        )}
+        {isSubmitting && (
+          <div className="alert alert-info" style={{marginBottom: '1rem'}}>
+            Submitting your request...
+          </div>
+        )}
         <PreviewBody ref={previewRef}/>
       </PreviewModal>
     </>
