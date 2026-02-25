@@ -30,6 +30,8 @@
   },
   "devDependencies": {
     "@fluentui/react": "^7.106.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
     "@types/react-google-recaptcha": "^2.1.2",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
