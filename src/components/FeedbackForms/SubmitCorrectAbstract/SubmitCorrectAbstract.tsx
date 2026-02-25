@@ -99,7 +99,7 @@ export const OriginCtx = React.createContext<IOriginContext>({
 
 export type SubmissionState =
   | { status: 'pending' }
-  | { status: 'error'; message: string; code: number; changes: string }
+  | { status: 'error'; message: string; code?: number; changes: string }
   | { status: 'success' }
   | null;
 
