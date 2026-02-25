@@ -5,9 +5,48 @@ import { AlertType } from '../components/AlertModal';
 import { SubmitCorrectAbstractFormValues } from '../models';
 import { FormSubmissionCtx } from './SubmitCorrectAbstract';
 
+const CopyableChanges: React.FunctionComponent<{ changes: string }> = ({ changes }) => {
+  if (!changes || changes === 'Unable%20to%20generate%20diff') {
+    return null;
+  }
+
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(changes);
+  } catch (_e) {
+    return null;
+  }
+
+  if (!decoded.trim()) {
+    return null;
+  }
+
+  return (
+    <details style={{ marginTop: '0.75rem' }}>
+      <summary style={{ cursor: 'pointer' }}>
+        Copy your changes to include in an email
+      </summary>
+      <pre
+        style={{
+          marginTop: '0.5rem',
+          padding: '0.75rem',
+          background: '#f5f5f5',
+          border: '1px solid #ddd',
+          borderRadius: '3px',
+          fontSize: '12px',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          userSelect: 'all',
+        }}
+      >
+        {decoded}
+      </pre>
+    </details>
+  );
+};
+
 const FormStatus: React.FunctionComponent = () => {
   const { submissionState } = React.useContext(FormSubmissionCtx);
-
   const { errors } = useFormContext<SubmitCorrectAbstractFormValues>();
 
   if (Object.keys(errors).length > 0) {
@@ -33,25 +72,54 @@ const FormStatus: React.FunctionComponent = () => {
   }
 
   if (submissionState?.status === 'error') {
-    if (submissionState.code === 500 || submissionState.code >= 400 && submissionState.code <= 499) {
+    const hasHttpError =
+      submissionState.code === 500 ||
+      (submissionState.code != null &&
+        submissionState.code >= 400 &&
+        submissionState.code <= 499);
+
+    const isRecaptchaError =
+      !submissionState.code &&
+      typeof submissionState.message === 'string' &&
+      submissionState.message.toLowerCase().includes('recaptcha');
+
+    if (isRecaptchaError) {
+      return (
+        <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
+          <p>
+            Our security check could not load. Please refresh the page and try
+            again.
+          </p>
+          <p>
+            If the problem persists, send an email with your changes to{' '}
+            <strong>adshelp@cfa.harvard.edu</strong>.
+          </p>
+          <CopyableChanges changes={submissionState.changes} />
+        </div>
+      );
+    }
+
+    if (hasHttpError) {
       return (
         <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
           There was an error processing the request, please try again, or send
           an email with your changes to{' '}
-          <strong>adshelp(at)cfa.harvard.edu</strong>.
-        </div>
-      );
-    } else {
-      return (
-        <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
-          <p>{submissionState.message}</p>
-          <p>
-            Please try again, or send an email with your changes to{' '}
-            <strong>adshelp(at)cfa.harvard.edu</strong>.
-          </p>
+          <strong>adshelp@cfa.harvard.edu</strong>.
+          <CopyableChanges changes={submissionState.changes} />
         </div>
       );
     }
+
+    return (
+      <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
+        <p>{submissionState.message}</p>
+        <p>
+          Please try again, or send an email with your changes to{' '}
+          <strong>adshelp@cfa.harvard.edu</strong>.
+        </p>
+        <CopyableChanges changes={submissionState.changes} />
+      </div>
+    );
   }
 
   return null;
