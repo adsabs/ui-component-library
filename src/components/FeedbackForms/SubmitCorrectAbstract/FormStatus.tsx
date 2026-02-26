@@ -6,6 +6,8 @@ import { SubmitCorrectAbstractFormValues } from '../models';
 import { FormSubmissionCtx } from './SubmitCorrectAbstract';
 
 const CopyableChanges: React.FunctionComponent<{ changes: string }> = ({ changes }) => {
+  const [copied, setCopied] = React.useState(false);
+
   if (!changes || changes === 'Unable%20to%20generate%20diff') {
     return null;
   }
@@ -21,27 +23,27 @@ const CopyableChanges: React.FunctionComponent<{ changes: string }> = ({ changes
     return null;
   }
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(decoded).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
-    <details style={{ marginTop: '0.75rem' }}>
-      <summary style={{ cursor: 'pointer' }}>
-        Copy your changes to include in an email
-      </summary>
-      <pre
-        style={{
-          marginTop: '0.5rem',
-          padding: '0.75rem',
-          background: '#f5f5f5',
-          border: '1px solid #ddd',
-          borderRadius: '3px',
-          fontSize: '12px',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          userSelect: 'all',
-        }}
+    <div style={{ marginTop: '0.75rem' }}>
+      <button
+        type="button"
+        className="btn btn-default"
+        onClick={handleCopy}
       >
-        {decoded}
-      </pre>
-    </details>
+        <i
+          className={`fa ${copied ? 'fa-check' : 'fa-clipboard'}`}
+          aria-hidden
+        />{' '}
+        {copied ? 'Copied!' : 'Copy your changes to include in an email'}
+      </button>
+    </div>
   );
 };
 
@@ -62,12 +64,12 @@ const FormStatus: React.FunctionComponent = () => {
   }
 
   if (submissionState?.status === 'pending') {
-    return <AlertModal type={AlertType.LOADING}>Submitting...</AlertModal>;
+    return <AlertModal key="pending" type={AlertType.LOADING}>Submitting...</AlertModal>;
   }
 
   if (submissionState?.status === 'success') {
     return (
-      <AlertModal type={AlertType.SUCCESS}>Submitted, thank you!</AlertModal>
+      <AlertModal key="success" type={AlertType.SUCCESS}>Submitted, thank you!</AlertModal>
     );
   }
 
@@ -86,6 +88,7 @@ const FormStatus: React.FunctionComponent = () => {
     if (isRecaptchaError) {
       return (
         <AlertModal
+          key="error-recaptcha"
           type={AlertType.ERROR}
           title="Security Check Failed"
           timeout={0}
@@ -105,7 +108,7 @@ const FormStatus: React.FunctionComponent = () => {
 
     if (hasHttpError) {
       return (
-        <AlertModal type={AlertType.ERROR} timeout={0}>
+        <AlertModal key="error-http" type={AlertType.ERROR} timeout={0}>
           <p>
             There was an error processing the request, please try again, or
             send an email with your changes to{' '}
@@ -117,7 +120,7 @@ const FormStatus: React.FunctionComponent = () => {
     }
 
     return (
-      <AlertModal type={AlertType.ERROR} timeout={0}>
+      <AlertModal key="error-generic" type={AlertType.ERROR} timeout={0}>
         <p>{submissionState.message}</p>
         <p>
           Please try again, or send an email with your changes to{' '}

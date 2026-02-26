@@ -46,7 +46,7 @@ it('shows user-friendly message when recaptcha fails', () => {
   expect(screen.getByText(/security check could not load/i)).toBeTruthy();
 });
 
-it('shows copyable changes block when diff is available', () => {
+it('shows copy button when diff is available', () => {
   render(
     <Wrapper
       submissionState={{
@@ -56,7 +56,9 @@ it('shows copyable changes block when diff is available', () => {
       }}
     />
   );
-  expect(screen.getByText('title: Old Title -> New Title')).toBeTruthy();
+  expect(
+    screen.getByText(/copy your changes to include in an email/i)
+  ).toBeTruthy();
 });
 
 it('shows generic server error for 500', () => {

@@ -64,10 +64,16 @@ export const useRecaptcha = (formName: string) => {
     if (!siteKey) {
       return;
     }
-    loadPromiseRef.current = loadScript(siteKey);
+    loadPromiseRef.current = loadScript(siteKey).catch(() => {
+      // Suppress unhandled rejection here; execute() surfaces the error
+    });
   }, [siteKey]);
 
   const execute = useCallback(() => {
+    if (!siteKey) {
+      return Promise.resolve('dev-bypass');
+    }
+
     return new Promise<string>((resolve, reject) => {
       const run = () => {
         if (!window.grecaptcha) {
