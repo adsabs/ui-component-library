@@ -159,7 +159,7 @@ const SubmitCorrectAbstract: React.FunctionComponent = () => {
     if (submissionState) {
       handle = setTimeout(
         setSubmissionState,
-        submissionState.status === 'success' ? 3000 : 10000,
+        submissionState.status === 'success' ? 3000 : 30000,
         null,
       );
     }

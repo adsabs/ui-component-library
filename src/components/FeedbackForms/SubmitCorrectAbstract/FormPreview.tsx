@@ -197,7 +197,7 @@ const getSafeDiff = (src: SubmitCorrectAbstractFormValues, curr: SubmitCorrectAb
   }
 };
 
-const createFeedbackString = (
+export const createFeedbackString = (
   original: SubmitCorrectAbstractFormValues,
   current: SubmitCorrectAbstractFormValues,
   previewText: string,
