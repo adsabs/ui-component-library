@@ -76,7 +76,7 @@ const TextChanges = ({ keyProp, changes, right }: ITextChangeElementProps) => {
   return (
     <>
       <Bold>Diff:</Bold>
-      {changes.reduce((list, change) => {
+      {changes.reduce((list: React.ReactElement[], change) => {
         if (change.added) {
           return [...list, <Add inline>{change.value}</Add>];
         } else if (change.removed) {
@@ -101,7 +101,7 @@ const ArrayChanges = ({ keyProp, changes }: IArrayChangeElementProps) => {
   let i = 0;
   return (
     <>
-      {changes.reduce((val, change) => {
+      {changes.reduce((val: React.ReactElement[], change) => {
         if (change.added) {
           const currentCount = i;
           i += change.count || 0;
@@ -234,7 +234,7 @@ const strikeText = (str: string) => {
 
 const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
   // spread out entries
-  const entries = changes.reduce((acc, change) => {
+  const entries = changes.reduce((acc: Change[], change) => {
     return [
       ...acc,
       ...change.value.map((v) => ({ count: 1, ...change, value: v })),
@@ -248,7 +248,8 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
     if (
       count > 1 &&
       entries[i].removed &&
-      entries[i + count].count > 1 &&
+      entries[i + count] &&
+      (entries[i + count].count ?? 0) > 1 &&
       entries[i + count].added
     ) {
       // actual change made to multiple entries in a row, they are matched by index, not sequential
@@ -278,7 +279,7 @@ const stringifyArrayChanges = (changes: ArrayChange<string>[]) => {
       out.push(`+ ${index} ${entries[i].value}`);
       index += 1;
     } else if (
-      entries[i].count > 1 &&
+      (entries[i].count ?? 0) > 1 &&
       !entries[i].added &&
       !entries[i].removed
     ) {

@@ -1,8 +1,8 @@
 export {
   default as useBumblebee,
   PubSubEvent,
-  JSONResponse,
 } from './useBumblebee';
+export type { JSONResponse } from './useBumblebee';
 
 export { default as useAsync } from './useAsync';
 
