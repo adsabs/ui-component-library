@@ -9,7 +9,7 @@ import {defaultValues} from './MissingIncorrectRecord';
 import PreviewBody, {fetchReference} from './PreviewBody';
 import {useRecaptcha} from '../../../hooks/useRecaptcha';
 
-const fetchBibcodes = ([bibcodes]: [string[]]) => {
+const fetchBibcodes = ([bibcodes]: string[][]) => {
   return apiFetch({
     target: ApiTarget.SEARCH,
     query: {

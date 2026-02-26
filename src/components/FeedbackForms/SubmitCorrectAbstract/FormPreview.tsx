@@ -69,34 +69,32 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
   const {setSubmissionState} = React.useContext(FormSubmissionCtx);
 
   const handleSubmit = async () => {
-    setSubmissionState({status: 'pending'});
-
+    setSubmissionState({ status: 'pending' });
 
     if (previewRef.current) {
       const currentValues = {
         ...origin,
         ...getValues(),
-        recaptcha: await execute(),
       };
 
       try {
+        const recaptchaToken = await execute();
         await submitFeedback(
           createFeedbackString(
             origin,
-            currentValues,
+            { ...currentValues, recaptcha: recaptchaToken },
             getSafeDiff(origin, currentValues),
           ),
         );
         if (typeof onSubmit === 'function') {
           onSubmit();
         }
-
-        setSubmissionState({status: 'success'});
+        setSubmissionState({ status: 'success' });
         handleReset();
       } catch (e) {
         setSubmissionState({
           status: 'error',
-          message: e?.responseJSON?.message,
+          message: typeof e === 'string' ? e : e instanceof Error ? e.message : e?.responseJSON?.message ?? 'An error occurred',
           code: e?.status,
           changes: getSafeDiff(origin, currentValues),
         });
