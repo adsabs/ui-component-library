@@ -28,7 +28,7 @@ const AlertModal: React.FC<IAlertModalProps> = (props) => {
 
   React.useEffect(() => {
     let id: number;
-    if (open) {
+    if (open && timeout > 0) {
       id = setTimeout(close, timeout);
     }
     return () => clearTimeout(id);

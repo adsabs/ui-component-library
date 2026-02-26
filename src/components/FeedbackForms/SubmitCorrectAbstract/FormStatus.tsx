@@ -85,40 +85,46 @@ const FormStatus: React.FunctionComponent = () => {
 
     if (isRecaptchaError) {
       return (
-        <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
+        <AlertModal
+          type={AlertType.ERROR}
+          title="Security Check Failed"
+          timeout={0}
+        >
           <p>
-            Our security check could not load. Please refresh the page and try
-            again.
+            Our security check could not load. Please refresh the page and
+            try again.
           </p>
           <p>
             If the problem persists, send an email with your changes to{' '}
             <strong>adshelp@cfa.harvard.edu</strong>.
           </p>
           <CopyableChanges changes={submissionState.changes} />
-        </div>
+        </AlertModal>
       );
     }
 
     if (hasHttpError) {
       return (
-        <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
-          There was an error processing the request, please try again, or send
-          an email with your changes to{' '}
-          <strong>adshelp@cfa.harvard.edu</strong>.
+        <AlertModal type={AlertType.ERROR} timeout={0}>
+          <p>
+            There was an error processing the request, please try again, or
+            send an email with your changes to{' '}
+            <strong>adshelp@cfa.harvard.edu</strong>.
+          </p>
           <CopyableChanges changes={submissionState.changes} />
-        </div>
+        </AlertModal>
       );
     }
 
     return (
-      <div className="alert alert-warning" style={{ marginTop: '1rem' }}>
+      <AlertModal type={AlertType.ERROR} timeout={0}>
         <p>{submissionState.message}</p>
         <p>
           Please try again, or send an email with your changes to{' '}
           <strong>adshelp@cfa.harvard.edu</strong>.
         </p>
         <CopyableChanges changes={submissionState.changes} />
-      </div>
+      </AlertModal>
     );
   }
 

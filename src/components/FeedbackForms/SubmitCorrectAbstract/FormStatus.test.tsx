@@ -43,7 +43,7 @@ it('shows user-friendly message when recaptcha fails', () => {
       }}
     />
   );
-  expect(screen.getByText(/security check/i)).toBeTruthy();
+  expect(screen.getByText(/security check could not load/i)).toBeTruthy();
 });
 
 it('shows copyable changes block when diff is available', () => {
