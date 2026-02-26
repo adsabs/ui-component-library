@@ -53,6 +53,8 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
   >();
   const { execute } = useRecaptcha('associated');
   const [show, setShow] = React.useState(false);
+  const [recaptchaError, setRecaptchaError] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [ids, setIds] = React.useState<string[]>([]);
   const state = useAsync<JSONResponse>({
     deferFn: fetchBibcodes,
@@ -84,12 +86,43 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
   };
 
   const handleSubmit = useCallback(async () => {
-    if (typeof onSubmit === 'function') {
-      onSubmit();
+    setRecaptchaError(null);
+    setIsSubmitting(true);
+    let recaptchaToken: string;
+    try {
+      recaptchaToken = await execute();
+    } catch (err) {
+      setRecaptchaError(
+        'reCAPTCHA could not run. Please allow Google reCAPTCHA or email adshelp@cfa.harvard.edu.'
+      );
+      try {
+        const sentry = (window as any).Sentry;
+        if (sentry && typeof sentry.captureMessage === 'function') {
+          sentry.captureMessage('recaptcha-error', {
+            level: 'error',
+            extra: {
+              action: 'associated',
+              message: err?.message || err,
+            },
+          });
+        }
+      } catch (_) {}
+      setIsSubmitting(false);
+      return false;
     }
     const params = getValues();
-    params.recaptcha = await execute();
-    await submitFeedback(createFeedbackString(params));
+    params.recaptcha = recaptchaToken;
+    try {
+      await submitFeedback(createFeedbackString(params));
+      if (typeof onSubmit === 'function') {
+        onSubmit();
+      }
+      setIsSubmitting(false);
+      return true;
+    } catch (e) {
+      setIsSubmitting(false);
+      return false;
+    }
   }, [execute, getValues, onSubmit]);
 
   React.useEffect(() => {
@@ -158,14 +191,26 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
           onHide={() => {
             setShow(false);
           }}
-          onSubmit={() => {
-            handleSubmit();
-            setShow(false);
+          onSubmit={async () => {
+            const success = await handleSubmit();
+            if (success) {
+              setShow(false);
+            }
           }}
           onCancel={() => {
             setShow(false);
           }}
         >
+          {recaptchaError && (
+            <div className="alert alert-danger" style={{ marginBottom: '1rem' }}>
+              {recaptchaError}
+            </div>
+          )}
+          {isSubmitting && (
+            <div className="alert alert-info" style={{ marginBottom: '1rem' }}>
+              Submitting your request...
+            </div>
+          )}
           <PreviewBody />
         </PreviewModal>
       </IfFulfilled>
