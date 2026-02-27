@@ -8,6 +8,7 @@ import {MissingIncorrectRecordFormValues} from '../models';
 import {defaultValues} from './MissingIncorrectRecord';
 import PreviewBody, {fetchReference} from './PreviewBody';
 import {useRecaptcha} from '../../../hooks/useRecaptcha';
+import {sendFeedbackToSentry} from '../../../utils/sentryFeedback';
 
 const fetchBibcodes = ([bibcodes]: [string[]]) => {
   return apiFetch({
@@ -109,6 +110,20 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({onSubmit}) => {
   }, [isFulfilled]);
 
   const handleSubmit = async () => {
+    const values = getValues();
+    sendFeedbackToSentry({
+      formName: 'missing_incorrect_record',
+      subject: 'Missing References',
+      name: values.name,
+      email: values.email,
+      data: {
+        bibcodes: values.bibcodes.map(({citing, cited}) => ({
+          citing: citing.trim(),
+          cited: cited.trim(),
+        })),
+      },
+    });
+
     setRecaptchaError(null);
     setIsSubmitting(true);
     let recaptchaToken: string;
