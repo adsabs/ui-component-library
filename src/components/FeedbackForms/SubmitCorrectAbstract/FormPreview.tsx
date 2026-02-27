@@ -7,6 +7,7 @@ import {createDiffString, ProcessedFormValues, processTree} from './DiffView';
 import PreviewBody from './PreviewBody';
 import {defaultValues, FormSubmissionCtx, OriginCtx} from './SubmitCorrectAbstract';
 import {useRecaptcha} from '../../../hooks/useRecaptcha';
+import {sendFeedbackToSentry} from '../../../utils/sentryFeedback';
 
 type FeedbackRequest = {
   original: ProcessedFormValues;
@@ -71,6 +72,23 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({
   const {setSubmissionState} = React.useContext(FormSubmissionCtx);
 
   const handleSubmit = async () => {
+    const formValues = getValues();
+    sendFeedbackToSentry({
+      formName: 'submit_correct_abstract',
+      subject: `${formValues.entryType === EntryType.Edit
+        ? 'Updated' : 'New'} Record`,
+      name: formValues.name,
+      email: formValues.email,
+      data: {
+        entryType: formValues.entryType,
+        bibcode: formValues.bibcode,
+        origin: origin ? {
+          bibcode: origin.bibcode,
+          title: origin.title,
+        } : undefined,
+      },
+    });
+
     setSubmissionState({status: 'pending'});
     setRecaptchaError(null);
     setIsSubmitting(true);

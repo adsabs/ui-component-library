@@ -7,6 +7,7 @@ import { PreviewModal } from '../components';
 import { AssociatedArticlesFormValues } from '../models';
 import PreviewBody from './PreviewBody';
 import { useRecaptcha } from '../../../hooks/useRecaptcha';
+import { sendFeedbackToSentry } from '../../../utils/sentryFeedback';
 
 const fetchBibcodes = ([bibcodes]: [string[]]) => {
   return apiFetch({
@@ -86,6 +87,20 @@ const FormPreview: React.FunctionComponent<IFormPreview> = ({ onSubmit }) => {
   };
 
   const handleSubmit = useCallback(async () => {
+    const values = getValues();
+    sendFeedbackToSentry({
+      formName: 'associated',
+      subject: 'Associated Articles',
+      name: values.name,
+      email: values.email,
+      data: {
+        sourceBibcode: values.sourceBibcode,
+        targets: values.associated.map((a) => a.bibcode),
+        relation: values.relation,
+        customRelation: values.customRelation,
+      },
+    });
+
     setRecaptchaError(null);
     setIsSubmitting(true);
     let recaptchaToken: string;
