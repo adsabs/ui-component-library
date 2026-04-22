@@ -1,5 +1,5 @@
 import { apiFetch, ApiTarget } from '../../api';
-import { SubmitCorrectAbstractFormValues, Url } from '../../models';
+import { SubmitCorrectAbstractFormValues, Url, UrlType } from '../../models';
 
 // lodash should be a global on the page
 declare var _: any;
@@ -15,53 +15,24 @@ export type FullRecord = Omit<
   | 'recaptcha'
 >;
 
-const SKIP_URLS = [
-  'http://www.cfa.harvard.edu/sao',
-  'https://www.cfa.harvard.edu/',
-  'http://www.si.edu',
-  'http://www.nasa.gov',
-];
+const URL_TYPE_MAP: Record<string, UrlType> = {
+  arxiv: UrlType.ARXIV,
+  pdf: UrlType.PDF,
+  doi: UrlType.DOI,
+  html: UrlType.HTML,
+};
 
-/**
- * Scrape the ESOURCE endpoint for URLs listed for this entity
- * TODO: Currently filters out header and footer links, but should find a better way to
- * do this in the future.
- *
- * @param identifier Bibcode or other article identifier
- * @returns Array of URL objects including type and URL
- */
-const getUrls = async (identifier: string): Promise<Url[]> => {
-  // url regex, skip internal links
-  const reg = /href="(https?:\/\/[^"]*)"/gi;
-  try {
-    const body = await fetch(`link_gateway/${encodeURIComponent(identifier)}/ESOURCE`);
-    const raw = await body.text();
-    if (raw) {
-      return (
-        Array.from(
-          new Set(raw.matchAll(reg)),
-          (e) =>
-            ({
-              type: e[1].includes('arxiv')
-                ? 'arxiv'
-                : e[1].includes('pdf')
-                  ? 'pdf'
-                  : e[1].includes('doi')
-                    ? 'doi'
-                    : 'html',
-              value: e[1],
-            } as Url),
-        )
-          .slice(1)
-
-          // filter out urls based on a skip list
-          .filter((url) => !SKIP_URLS.includes(url.value))
-      );
-    }
-  } catch (e) {
-    // do not handle
+export const transformUrl = (url: string) => {
+  if (!url || typeof url !== 'string') {
+    return { type: UrlType.OTHER, value: '' } as Url;
   }
-  return [];
+
+  const normalizedUrl = url.toLowerCase().replace(/\/$/, '');
+  const urlType = Object.keys(URL_TYPE_MAP).find((key) =>
+    normalizedUrl.includes(key)
+  );
+  const type = urlType ? URL_TYPE_MAP[urlType] : UrlType.HTML;
+  return { type, value: normalizedUrl } as Url;
 };
 
 const fetchFullRecord = _.memoize(
@@ -80,7 +51,26 @@ const fetchFullRecord = _.memoize(
       },
     });
 
-    const urls = await getUrls(identifier);
+    const urlResponse = await apiFetch({
+      target: `${ApiTarget.RESOLVER}/${identifier}/ESOURCE`,
+      options: {
+        method: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=UTF-8',
+      },
+    });
+
+    const urls =
+      urlResponse.action === 'display' && urlResponse.links?.records
+        ? urlResponse.links.records.map((r) => decodeURIComponent(r.url))
+        : urlResponse.action === 'redirect' && urlResponse.link
+        ? [decodeURIComponent(urlResponse.link)]
+        : [];
+
+    // tranform urls to Url type
+    const transformedUrls = urls
+      .map((url) => transformUrl(url))
+      .filter((tu) => tu.value !== '');
 
     if (response.response?.docs?.length > 0) {
       const {
@@ -93,7 +83,7 @@ const fetchFullRecord = _.memoize(
         author = [],
         aff = [],
         orcid_pub = [],
-        database = []
+        database = [],
       } = response.response.docs[0];
 
       const authors = author.map((name, position) => ({
@@ -113,13 +103,13 @@ const fetchFullRecord = _.memoize(
         authors,
         collection: database,
         keywords: keywords.map((k) => ({ value: k })),
-        urls,
+        urls: transformedUrls,
         confirmNoAuthor: false,
       };
     }
 
     throw new Error('No Result for this bibcode');
-  },
+  }
 );
 
 export default fetchFullRecord;

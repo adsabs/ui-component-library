@@ -26,6 +26,23 @@ export type JSONResponse = {
     docs: ArticleRecord[];
     numFound: number;
   };
+  action: 'display' | 'redirect';
+  link?: string;
+  link_type?: string;
+  links?: {
+    count: number;
+    link_type: string;
+    records: [
+      {
+        bibcode: string;
+        count: number;
+        title: string;
+        type: string;
+        url: string;
+      }
+    ];
+  };
+  error?: string;
 };
 
 type Query = {
@@ -80,4 +97,5 @@ export enum ApiTarget {
   EXPORT = 'export/',
   FEEDBACK = 'feedback',
   FEEDBACK_FALLBACK = 'feedback/userfeedback',
+  RESOLVER = 'resolver',
 }
